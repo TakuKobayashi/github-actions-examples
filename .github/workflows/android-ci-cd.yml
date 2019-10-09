@@ -27,8 +27,8 @@ jobs:
       run: |
         wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.sdk-tools }}.zip
         unzip -d android-sdk-linux android-sdk.zip
-        mkdir -p /root/.android
-        touch /root/.android/repositories.cfg
+        sudo mkdir -p /root/.android
+        sudo touch /root/.android/repositories.cfg
         echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
         echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
         echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
