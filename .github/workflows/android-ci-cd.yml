@@ -44,5 +44,5 @@ jobs:
         ./gradlew assembleDebug
     - uses: actions/upload-artifact@master
       with:
-        name: debugBuild
-        path: Android/app/build
+        name: outputs
+        path: Android/app/build/outputs/
