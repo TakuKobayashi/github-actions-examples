@@ -43,3 +43,4 @@ jobs:
         set -o pipefail
     - name: Android Debug Build
       run: ./gradlew assembleDebug
+      with: build
