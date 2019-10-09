@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      android:
+      matrix:
         compile-sdk: "29"
         build-tools: "29.0.2"
         sdk-tools:   "4333796"
@@ -25,13 +25,13 @@ jobs:
         java-version: 1.8
     - name: setup Android SDK
       run: |
-        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ android.compile-sdk }}.zip
+        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.compile-sdk }}.zip
         unzip -d android-sdk-linux android-sdk.zip
         mkdir -p /root/.android
         touch /root/.android/repositories.cfg
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ android.build-tools }}" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.build-tools }}" >/dev/null
         echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ android.sdk-tools }}" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.sdk-tools }}" >/dev/null
         export ANDROID_HOME=$PWD/android-sdk-linux
         export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
         chmod +x ./gradlew
