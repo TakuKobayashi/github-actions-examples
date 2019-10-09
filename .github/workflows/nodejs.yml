@@ -1,4 +1,4 @@
-name: frontendCD
+name: frontend CI/CD
 
 on:
   push:
@@ -20,11 +20,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: move frontend
-      run: |
-        cd frontend
     - name: npm install, build
       run: |
+        cd frontend
         npm install
         npm run build --if-present
       env:
