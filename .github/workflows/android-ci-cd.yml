@@ -39,4 +39,6 @@ jobs:
         yes | android-sdk-linux/tools/bin/sdkmanager --licenses
         set -o pipefail
     - name: Android Debug Build
-      run: ./Android/gradlew assembleDebug
+      run: |
+        cd Android/
+        ./gradlew assembleDebug
