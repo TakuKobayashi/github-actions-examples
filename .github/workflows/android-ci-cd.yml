@@ -42,3 +42,7 @@ jobs:
       run: |
         cd Android/
         ./gradlew assembleDebug
+    - uses: actions/upload-artifact@master
+      with:
+        name: debugBuild
+        path: Android/app/build
