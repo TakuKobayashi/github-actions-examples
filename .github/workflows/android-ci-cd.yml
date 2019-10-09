@@ -34,9 +34,9 @@ jobs:
         echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
         export ANDROID_HOME=$PWD/android-sdk-linux
         export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
-        chmod +x ./gradlew
+        chmod +x ./Android/gradlew
         set +o pipefail
         yes | android-sdk-linux/tools/bin/sdkmanager --licenses
         set -o pipefail
     - name: Android Debug Build
-      run: ./gradlew assembleDebug
+      run: ./Android/gradlew assembleDebug
