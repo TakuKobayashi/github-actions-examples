@@ -1,5 +1,7 @@
 name: Android CI/CD
 
+on: [push]
+
 jobs:
   build:
 
