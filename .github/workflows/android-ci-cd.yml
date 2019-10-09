@@ -9,9 +9,9 @@ jobs:
 
     strategy:
       matrix:
-        compile-sdk: 29
-        build-tools: 29.0.2
-        sdk-tools:   4333796
+        compile-sdk: [29]
+        build-tools: [29.0.2]
+        sdk-tools:   [4333796]
 
     steps:
     - uses: actions/checkout@v1
