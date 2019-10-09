@@ -1,4 +1,4 @@
-name: frontend CI/CD
+name: react-web CI/CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     - master
 
 jobs:
-  build-and-deploy-frontend:
+  build-and-deploy-react-web:
 
     runs-on: ubuntu-latest
 
@@ -22,7 +22,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build
       run: |
-        cd frontend
+        cd react-web
         npm install
         npm run build --if-present
       env:
@@ -32,4 +32,4 @@ jobs:
       env:
         ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: frontend/build
+        PUBLISH_DIR: react-web/build
