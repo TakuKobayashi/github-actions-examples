@@ -1,10 +1,5 @@
 name: Android CI/CD
 
-on:
-  push:
-    branches:
-    - master
-
 jobs:
   build:
 
