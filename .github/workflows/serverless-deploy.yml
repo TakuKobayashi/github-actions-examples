@@ -5,14 +5,15 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    working-directory: ./serverless
     steps:
     - uses: actions/checkout@master
     - name: change root directory
       run: cd serverless
     - name: npm install
+      working-directory: ./serverless
       run: npm install
     - name: serverless deploy
+      working-directory: ./serverless
       uses: serverless/github-action@master
       with:
         args: deploy
