@@ -22,10 +22,10 @@ jobs:
         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - name: serverless package
       working-directory: ./serverless
-      run: npm run serverless package --package ./build
+      run: npm run serverless package
     - name: serverless deploy
       working-directory: ./serverless
-      run: npm run serverless deploy --package ./build
+      run: npm run serverless deploy --package .serverless
     - uses: actions/upload-artifact@master
       with:
         name: outputs
