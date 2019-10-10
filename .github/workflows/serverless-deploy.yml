@@ -11,14 +11,12 @@ jobs:
       run: cd serverless
     - name: npm install
       uses: actions/npm@master
-      run: |
-        cd serverless
-        npm install
+      with:
+        args: install --prefix ./serverless
     - name: serverless deploy
       uses: serverless/github-action@master
-      run: |
-        cd serverless
-        serverless deploy
+      with:
+        args: deploy
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
