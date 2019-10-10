@@ -28,5 +28,5 @@ jobs:
       run: npm run serverless deploy --package .serverless
     - uses: actions/upload-artifact@master
       with:
-        name: outputs
-        path: serverless/build
+        name: build
+        path: serverless/.serverless
