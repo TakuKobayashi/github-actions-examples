@@ -9,9 +9,9 @@ jobs:
     - uses: actions/checkout@master
     - name: change root directory
       run: cd serverless
-    - name: npm install
+    - name: yarn install
       working-directory: ./serverless
-      run: npm install
+      run: yarn install
     - name: setup aws access-key
       working-directory: ./serverless
       env:
@@ -22,11 +22,11 @@ jobs:
         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     - name: serverless package
       working-directory: ./serverless
-      run: npm run serverless package
+      run: yarn run serverless package --package ./build
     - name: serverless deploy
       working-directory: ./serverless
-      run: npm run serverless deploy --package .serverless
+      run: yarn run serverless deploy --package ./build
     - uses: actions/upload-artifact@master
       with:
         name: build
-        path: serverless/.serverless
+        path: serverless/build
