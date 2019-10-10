@@ -13,12 +13,11 @@ jobs:
       uses: actions/npm@master
       with:
         entrypoint: ./serverless
-        args: install
+        args: install --prefix ./serverless
     - name: serverless deploy
       uses: serverless/github-action@master
       with:
-        entrypoint: ./serverless
-        args: deploy
+        args: deploy --prefix ./serverless
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
