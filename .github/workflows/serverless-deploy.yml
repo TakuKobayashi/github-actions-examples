@@ -5,19 +5,17 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    working-directory: ./serverless
     steps:
     - uses: actions/checkout@master
     - name: change root directory
       run: cd serverless
     - name: npm install
-      run: |
-        cd serverless
-        npm install
+      run: npm install
     - name: serverless deploy
       uses: serverless/github-action@master
-      run: |
-        cd serverless
-        serverless deploy
+      with:
+        args: deploy
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
