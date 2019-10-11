@@ -13,7 +13,7 @@ jobs:
       working-directory: ./serverless
       run: |
         yarn install
-        yarn global add serverless
+        npm install -g serverless
     - name: serverless package
       working-directory: ./serverless
       run: serverless package --package ./build
