@@ -1,4 +1,7 @@
-on: [push]
+on:
+  push:
+    branches:
+    - serverless-deploy
 
 name: Serverless Deploy
 jobs:
