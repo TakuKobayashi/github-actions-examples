@@ -54,8 +54,10 @@ jobs:
         echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
         echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
     - name: Android Release Apk Build
+      working-directory: ./Android
       run: ./gradlew assembleRelease
     - name: Android Release aab Build
+      working-directory: ./Android
       run: ./gradlew bundleRelease
     - uses: actions/upload-artifact@master
       with:
