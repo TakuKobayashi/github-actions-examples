@@ -13,7 +13,8 @@ jobs:
       working-directory: ./serverless
       run: |
         yarn install
-        npm install -g serverless
+        yarn global add serverless
+        export PATH="$PATH:`yarn global bin`"
     - name: serverless package
       working-directory: ./serverless
       run: serverless package --package ./build
