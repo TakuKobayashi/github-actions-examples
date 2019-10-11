@@ -14,18 +14,17 @@ jobs:
       run: |
         yarn install
         yarn global add serverless
-        export PATH="$PATH:`yarn global bin`"
     - name: serverless package
       working-directory: ./serverless
-      run: serverless package --package ./build
+      run: `yarn global bin`/serverless package --package ./build
     - name: serverless deploy
       working-directory: ./serverless
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
-        serverless deploy --package ./build
+        `yarn global bin`/serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
+        `yarn global bin`/serverless deploy --package ./build
     - uses: actions/upload-artifact@master
       with:
         name: build
