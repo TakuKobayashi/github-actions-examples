@@ -42,22 +42,22 @@ jobs:
         set +o pipefail
         yes | android-sdk-linux/tools/bin/sdkmanager --licenses
         set -o pipefail
-      - name: Setup Build Configs
-        working-directory: ./Android
-        env:
-          ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
-          ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
-        run: |
-          echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
-          echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
-          echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
-          echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
-          echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
-      - name: Android Release Apk Build
-        run: ./gradlew assembleRelease
-      - name: Android Release aab Build
-        run: ./gradlew bundleRelease
-      - uses: actions/upload-artifact@master
-        with:
-          name: outputs
-          path: Android/app/build/outputs/
+    - name: Setup Build Configs
+      working-directory: ./Android
+      env:
+        ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
+        ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
+      run: |
+        echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
+        echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
+        echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+        echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
+        echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+    - name: Android Release Apk Build
+      run: ./gradlew assembleRelease
+    - name: Android Release aab Build
+      run: ./gradlew bundleRelease
+    - uses: actions/upload-artifact@master
+      with:
+        name: outputs
+        path: Android/app/build/outputs/
