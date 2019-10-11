@@ -1,4 +1,4 @@
-name: Android Debug Build
+name: Android Release Build
 
 on:
   push:
