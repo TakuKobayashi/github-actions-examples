@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-    - master
+    - serverless-deploy
 
 name: Serverless Deploy
 jobs:
@@ -10,22 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: change root directory
-      run: cd serverless
+    - name: setup ubuntu
+      run: sudo apt-get --quiet update --yes
     - name: yarn install
       working-directory: ./serverless
       run: yarn install
-    - name: serverless package
-      working-directory: ./serverless
-      run: yarn run serverless package --package ./build
-    - name: serverless deploy
+    - name: serverless package and deploy
       working-directory: ./serverless
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        yarn run serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
-        yarn run serverless deploy --package ./build
+        yarn add serverless
+        ./node_modules/serverless/bin/serverless package --package ./build
+        ./node_modules/serverless/bin/serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
+        ./node_modules/serverless/bin/serverless deploy --package ./build
     - uses: actions/upload-artifact@master
       with:
         name: build

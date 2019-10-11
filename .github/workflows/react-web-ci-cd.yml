@@ -16,15 +16,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: setup ubuntu
+      run: sudo apt-get --quiet update --yes
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build
+      working-directory: ./react-web
       run: |
-        cd react-web
-        npm install
-        npm run build --if-present
+        yarn install
+        yarn run build --if-present
       env:
         CI: true
     - name: deploy
