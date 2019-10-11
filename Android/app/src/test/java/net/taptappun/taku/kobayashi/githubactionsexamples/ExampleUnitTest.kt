@@ -1,4 +1,4 @@
-package net.taptappun.taku.kobayashi.myapplication
+package net.taptappun.taku.kobayashi.githubactionsexamples
 
 import org.junit.Test
 

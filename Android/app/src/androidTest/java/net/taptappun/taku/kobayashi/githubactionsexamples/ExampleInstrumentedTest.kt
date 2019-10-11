@@ -1,4 +1,4 @@
-package net.taptappun.taku.kobayashi.myapplication
+package net.taptappun.taku.kobayashi.githubactionsexamples
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
