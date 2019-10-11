@@ -19,9 +19,11 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         yarn add serverless
-        "./node_modules/serverless/bin/serverless package --package ./build"
-        "./node_modules/serverless/bin/serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}"
-        "./node_modules/serverless/bin/serverless deploy --package ./build"
+        mkdir -p build
+        ls
+        ./node_modules/serverless/bin/serverless package --package ./build
+        ./node_modules/serverless/bin/serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
+        ./node_modules/serverless/bin/serverless deploy --package ./build
     - uses: actions/upload-artifact@master
       with:
         name: build
