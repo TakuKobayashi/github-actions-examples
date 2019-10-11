@@ -1,0 +1,63 @@
+name: Android Debug Build
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compile-sdk: [29]
+        build-tools: [29.0.2]
+        sdk-tools:   [4333796]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: setup ubuntu
+      run: |
+        sudo apt-get --quiet update --yes
+        sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+    - name: setup JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: download Android SDK
+      working-directory: ./Android
+      run: |
+        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.sdk-tools }}.zip
+        unzip -d android-sdk-linux android-sdk.zip
+        sudo mkdir -p /root/.android
+        sudo touch /root/.android/repositories.cfg
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
+        export ANDROID_HOME=$PWD/android-sdk-linux
+        export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+        chmod +x ./gradlew
+        set +o pipefail
+        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+        set -o pipefail
+      - name: Setup Build Configs
+        working-directory: ./Android
+        env:
+          ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
+          ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
+        run: |
+          echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
+          echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
+          echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+          echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
+          echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+      - name: Android Release Apk Build
+        run: ./gradlew assembleRelease
+      - name: Android Release aab Build
+        run: ./gradlew bundleRelease
+      - uses: actions/upload-artifact@master
+        with:
+          name: outputs
+          path: Android/app/build/outputs/
