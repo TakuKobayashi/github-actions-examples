@@ -57,3 +57,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+if(!properties.getProperty("GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE", "").empty){
+    apply plugin: 'com.github.triplet.play'
+
+    play{
+        serviceAccountCredentials = file(properties.getProperty("GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE", ""))
+        artifactDir = file("build/outputs/bundle/release/")
+        // リリースのStatus completed/draft/inProgress/halted のどれか(defaultは completed) inProgressだと部分公開という意味
+        releaseStatus = "draft"
+        // ストアにあるバージョンがConflictsしたらどうするか設定する autoは自動的に正しいバージョンを設定するという意味
+        resolutionStrategy = "auto"
+    }
+}
