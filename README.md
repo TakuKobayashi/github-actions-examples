@@ -97,6 +97,16 @@ ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 ### AndroidアプリのBuild, Google Play Storeへの反映方法
 
 
+### AndroidのKeystoreファイルをJKS p12に変換する方法
+
+```
+keytool -importkeystore -srckeystore mykey.keystore -destkeystore mykey.p12 -srcstoretype jks -deststoretype pkcs12
+```
+
+#### 参考
+
+ * [鍵ストアファイルとアプリの署名に関する情報の整理](https://tech.at-iroha.jp/?p=734)
+
 
 ### 参考
  * [actions-gh-pages](https://github.com/peaceiris/actions-gh-pages)
