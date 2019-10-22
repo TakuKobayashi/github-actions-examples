@@ -1,9 +1,7 @@
-name: Android Release Build
+name: Android Release Build And Deploy
 
 on:
-  push:
-    branches:
-    - master
+  [push]
 
 jobs:
   build:
