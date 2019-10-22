@@ -47,6 +47,7 @@ jobs:
       env:
         ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
         ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
+        GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE: ${{ secrets.GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE }}
       run: |
         echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
         echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
@@ -59,6 +60,13 @@ jobs:
     - name: Android Release aab Build
       working-directory: ./Android
       run: ./gradlew bundleRelease
+    - name: Release To Google Play
+      working-directory: ./Android
+      env:
+        GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE: ${{ secrets.GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE }}
+      run: |
+        echo "GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE=${GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE}" >> ./local.properties
+        ./gradlew publishBundle --track internal --release-status draft --artifact-dir ./app/build/outputs/bundle/release/ --resolution-strategy auto
     - uses: actions/upload-artifact@master
       with:
         name: outputs
