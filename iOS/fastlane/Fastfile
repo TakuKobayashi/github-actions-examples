@@ -20,8 +20,14 @@ platform :ios do
     cocoapods
   end
 
-  desc "Description of what the lane does"
-  lane :build do
+  desc "execute debug build"
+  lane :debug_build do
+    build_app(scheme: "github-actions-examples",
+      include_bitcode: true)
+  end
+
+  desc "execute release build by gym"
+  lane :release_build do
     gym(scheme: "github-actions-examples")
   end
 end
