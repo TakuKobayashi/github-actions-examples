@@ -20,10 +20,42 @@ platform :ios do
     cocoapods
   end
 
+  private_lane :update_team do |options|
+    update_project_team(
+      path: "github-actions-examples.xcodeproj",
+      teamid: ENV.fetch("TEAM_ID") { "TEAM_ID" }
+    )
+  end
+
+  desc "check debug build"
+  lane :check_debug_build do
+    update_team
+    build_app(
+      scheme: "github-actions-examples",
+      skip_package_ipa: true,
+      skip_archive: true,
+      include_bitcode: true,
+      configuration: "Debug"
+    )
+  end
+
   desc "execute debug build"
   lane :debug_build do
-    build_app(scheme: "github-actions-examples",
-      include_bitcode: true)
+    update_team
+    build_app(
+      scheme: "github-actions-examples",
+      include_bitcode: true,
+      configuration: "Debug"
+    )
+  end
+
+  desc "execute debug build test"
+  lane :debug_test do
+    update_team
+    scan(
+      workspace: "github-actions-examples.xcworkspace",
+      devices: ["iPhone 11 Pro Max"]
+    )
   end
 
   desc "execute release build by gym"
