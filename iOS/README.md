@@ -41,4 +41,4 @@ sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
  * https://github.com/fastlane/fastlane/issues/12263
  * https://github.com/fastlane/fastlane/issues/12662
 
- 
+## Development Teamが設定されていない
