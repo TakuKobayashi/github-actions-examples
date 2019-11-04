@@ -1,0 +1,30 @@
+name: Firebase Functions Deploy
+
+on:
+  [push]
+
+jobs:
+  build:
+    name: Build And Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: setup ubuntu
+        run: sudo apt-get --quiet update --yes
+      - name: yarn install, build
+        working-directory: ./firebase/functions
+        run: |
+          yarn install
+          yarn run build --if-present
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only Functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./firebase
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: ./firebase/dist
