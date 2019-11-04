@@ -44,7 +44,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: hosting-build
-      - name: cp hosting-build to firebase/public
+      - name: copy hosting-build to firebase/public
         run: |
           cp -rf ./hosting-build/ ./firebase/public/
       - name: Deploy to Firebase
