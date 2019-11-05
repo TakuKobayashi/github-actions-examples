@@ -83,4 +83,5 @@ jobs:
         echo "GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE=`pwd`/api-8329356095223371603-923129-678996634884.json" >> ./local.properties
     - name: Release To Google Play
       working-directory: ./Android
+      run: |
         ./gradlew publishBundle --track internal --release-status draft --artifact-dir ./outputs/bundle/release/ --resolution-strategy auto
