@@ -46,9 +46,7 @@ jobs:
           name: hosting-build
       - name: copy hosting-build to firebase/public
         run: |
-          ls
-          ls firebase
-          cp -rf hosting-build/ firebase/public/
+          mv -f ./hosting-build/* ./firebase/public/
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
