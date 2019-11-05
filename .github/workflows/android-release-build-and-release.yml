@@ -62,11 +62,25 @@ jobs:
       with:
         name: outputs
         path: Android/app/build/outputs/
-    - name: Release To Google Play
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v1
+    - name: Download Artifact
+      uses: actions/download-artifact@master
+      with:
+        name: outputs
+    - name: Setup Google Play Publishing local.properties
       working-directory: ./Android
       env:
         GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON: ${{ secrets.GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON }}
       run: |
         echo ${GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON} >> ./api-8329356095223371603-923129-678996634884.json
         echo "GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE=`pwd`/api-8329356095223371603-923129-678996634884.json" >> ./local.properties
-        ./gradlew publishBundle --track internal --release-status draft --artifact-dir ./app/build/outputs/bundle/release/ --resolution-strategy auto
+    - name: Release To Google Play
+      working-directory: ./Android
+        ./gradlew publishBundle --track internal --release-status draft --artifact-dir ./outputs/bundle/release/ --resolution-strategy auto
