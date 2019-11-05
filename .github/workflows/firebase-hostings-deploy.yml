@@ -1,0 +1,58 @@
+name: Firebase Hostings Deploy
+
+on:
+  push:
+    branches:
+    - firebase-deploy
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+
+    steps:
+      - uses: actions/checkout@master
+      - name: setup ubuntu
+        run: sudo apt-get --quiet update --yes
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: yarn install
+        working-directory: ./firebase/firebase-hosting-example
+        run: |
+          yarn install
+      - name: yarn build
+        working-directory: ./firebase/firebase-hosting-example
+        run: |
+          yarn run build
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: hosting-build
+          path: ./firebase/firebase-hosting-example/build
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: hosting-build
+      - name: copy hosting-build to firebase/public
+        run: |
+          mv -f ./hosting-build/* ./firebase/public/
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./firebase
