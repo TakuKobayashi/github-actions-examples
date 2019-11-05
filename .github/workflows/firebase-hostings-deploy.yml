@@ -46,6 +46,7 @@ jobs:
           name: hosting-build
       - name: copy hosting-build to firebase/public
         run: |
+          unzip -o ./hosting-build.zip
           rm -rf ./firebase/public/
           mkdir ./firebase/public/
           cp -rf ./hosting-build/ ./firebase/public/
