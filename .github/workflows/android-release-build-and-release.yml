@@ -79,7 +79,7 @@ jobs:
       env:
         GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON: ${{ secrets.GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON }}
       run: |
-        echo ${GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON} >> ./api-8329356095223371603-923129-678996634884.json
+        echo "${GOOGLE_PLAY_PUBLISH_API_CONFIG_JSON}" >> ./api-8329356095223371603-923129-678996634884.json
         echo "GOOGLE_PLAY_PUBLISH_API_CONFIG_FILE=`pwd`/api-8329356095223371603-923129-678996634884.json" >> ./local.properties
     - name: Release To Google Play
       working-directory: ./Android
