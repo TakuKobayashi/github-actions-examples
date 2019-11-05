@@ -1,7 +1,9 @@
 name: Firebase Hostings Deploy
 
 on:
-  [push]
+  push:
+    branches:
+    - firebase-deploy
 
 jobs:
   build:
