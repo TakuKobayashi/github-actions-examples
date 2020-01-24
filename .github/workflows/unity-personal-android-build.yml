@@ -17,8 +17,8 @@ jobs:
           - WebGL # WebGL.
     steps:
       - uses: actions/checkout@v1
-      - name: Activate Unity
-        uses: webbertakken/unity-activate@v1.1
+      - name: Unity - Activate
+        uses: webbertakken/unity-activate@v1
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
       - uses: webbertakken/unity-builder@v0.5
