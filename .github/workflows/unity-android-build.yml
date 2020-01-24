@@ -10,10 +10,10 @@ jobs:
         run: |
           sudo apt-get --quiet update --yes
       - name: Request manual activation file
-        uses: webbertakken/unity-request-manual-activation-file@v1
+        uses: webbertakken/unity-request-manual-activation-file@master
         id: getManualLicenseFile
       - name: Expose as artifact
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          name: UnityPersonal.alf
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
