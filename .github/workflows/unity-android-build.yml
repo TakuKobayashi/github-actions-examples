@@ -18,9 +18,9 @@ jobs:
           name: UnityPersonal.alf
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
       - name: Activate Unity
-          uses: webbertakken/unity-activate@v1.1
-          env:
-            UNITY_LICENSE: ${{ steps.getManualLicenseFile.outputs.filePath }}
+        uses: webbertakken/unity-activate@v1.1
+        env:
+          UNITY_LICENSE: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
   activation:
     name: activation Unity LICENSE
