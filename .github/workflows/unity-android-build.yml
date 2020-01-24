@@ -1,7 +1,7 @@
 name: Acquire activation file
 on: [push]
 jobs:
-  activation:
+  getLicense:
     name: Request manual activation file key
     runs-on: ubuntu-latest
     steps:
@@ -13,7 +13,22 @@ jobs:
         uses: webbertakken/unity-request-manual-activation-file@master
         id: getManualLicenseFile
       - name: Expose as artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@master
         with:
           name: UnityPersonal.alf
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+  activation:
+    name: activation Unity LICENSE
+    needs: getLicense
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: UnityPersonal.alf
+      - name: Activate Unity
+          uses: webbertakken/unity-activate@v1.1
+          env:
+            UNITY_LICENSE: UnityPersonal.alf
