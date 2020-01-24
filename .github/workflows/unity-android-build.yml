@@ -17,6 +17,10 @@ jobs:
         with:
           name: UnityPersonal.alf
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+      - name: Activate Unity
+          uses: webbertakken/unity-activate@v1.1
+          env:
+            UNITY_LICENSE: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
   activation:
     name: activation Unity LICENSE
@@ -28,11 +32,7 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
-          name: UnityPersonal.alf
+          name: UnityPersonal
       - name: personal
         run: |
-          cat UnityPersonal.alf
-      - name: Activate Unity
-        uses: webbertakken/unity-activate@v1.1
-        env:
-          UNITY_LICENSE: UnityPersonal.alf
+          ls UnityPersonal
