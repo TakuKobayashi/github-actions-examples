@@ -2,9 +2,6 @@ name: Build project
 
 on: [push]
 
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-
 jobs:
   buildForSomePlatforms:
     name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
@@ -20,6 +17,10 @@ jobs:
           - WebGL # WebGL.
     steps:
       - uses: actions/checkout@v1
+      - name: Activate Unity
+        uses: webbertakken/unity-activate@v1.1
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }
       - uses: webbertakken/unity-builder@v0.5
         with:
           projectPath: ${{ matrix.projectPath }}
