@@ -13,6 +13,8 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+USE_XCODE_VERSION = "11.3.1"
+
 default_platform(:ios)
 
 platform :ios do
@@ -20,46 +22,52 @@ platform :ios do
     cocoapods
   end
 
+  desc "Distribution of AppStore build"
+  lane :store_build  do |options|
+    select_xcode
+    update_team
+    configuration = 'Release'
+    if options[:configuration]
+      configuration = options[:configuration]
+    end
+    build_app(
+      configuration: configuration,
+      scheme: "github-actions-examples",
+      export_method: "app-store",
+      output_name: "github-actions-examples-store-#{configuration.downcase}.ipa",
+      include_bitcode: true,
+      clean: true
+    )
+  end
+
+  desc "Distribution of AdHoc build"
+  lane :adhoc_build do |options|
+    select_xcode
+    update_team
+    configuration = 'Debug'
+    if options[:configuration]
+      configuration = options[:configuration]
+    end
+    build_app(
+      configuration: configuration,
+      scheme: "github-actions-examples",
+      export_method: 'ad-hoc',
+      export_xcargs: '-allowProvisioningUpdates',
+      output_name: "github-actions-examples-adhoc-#{configuration.downcase}.ipa",
+      include_bitcode: true,
+      clean: true
+    )
+  end
+
   private_lane :update_team do |options|
-    update_project_team(
-      path: "github-actions-examples.xcodeproj",
-      teamid: ENV.fetch("TEAM_ID") { "TEAM_ID" }
-    )
+    #update_project_team(
+    #  path: "github-actions-examples.xcodeproj",
+    #  teamid: ENV.fetch("TEAM_ID") { "TEAM_ID" }
+    #)
   end
 
-  desc "check debug build"
-  lane :check_debug_build do
-    update_team
-    build_app(
-      scheme: "github-actions-examples",
-      skip_package_ipa: true,
-      skip_archive: true,
-      include_bitcode: true,
-      configuration: "Debug"
-    )
-  end
-
-  desc "execute debug build"
-  lane :debug_build do
-    update_team
-    build_app(
-      scheme: "github-actions-examples",
-      include_bitcode: true,
-      configuration: "Debug"
-    )
-  end
-
-  desc "execute debug build test"
-  lane :debug_test do
-    update_team
-    scan(
-      workspace: "github-actions-examples.xcworkspace",
-      devices: ["iPhone 11 Pro Max"]
-    )
-  end
-
-  desc "execute release build by gym"
-  lane :release_build do
-    gym(scheme: "github-actions-examples")
+  desc "select common xcode version"
+  private_lane :select_xcode do
+    xcversion(version: USE_XCODE_VERSION)
   end
 end
