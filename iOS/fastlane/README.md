@@ -16,26 +16,16 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
-### ios check_debug_build
+### ios store_build
 ```
-fastlane ios check_debug_build
+fastlane ios store_build
 ```
-check debug build
-### ios debug_build
+Distribution of AppStore build
+### ios adhoc_build
 ```
-fastlane ios debug_build
+fastlane ios adhoc_build
 ```
-execute debug build
-### ios debug_test
-```
-fastlane ios debug_test
-```
-execute debug build test
-### ios release_build
-```
-fastlane ios release_build
-```
-execute release build by gym
+Distribution of AdHoc build
 
 ----
 
