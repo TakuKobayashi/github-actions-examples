@@ -13,7 +13,7 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-USE_XCODE_VERSION = "11.3.1"
+USE_XCODE_VERSION = "11.5"
 
 default_platform(:ios)
 
@@ -30,14 +30,14 @@ platform :ios do
     if options[:configuration]
       configuration = options[:configuration]
     end
-    build_app(
+    build_app({
       configuration: configuration,
       scheme: "github-actions-examples",
       export_method: "app-store",
       output_name: "github-actions-examples-store-#{configuration.downcase}.ipa",
       include_bitcode: true,
-      clean: true
-    )
+      clean: true,
+    })
   end
 
   desc "Distribution of AdHoc build"
