@@ -13,8 +13,6 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
-USE_XCODE_VERSION = "11.5"
-
 default_platform(:ios)
 
 platform :ios do
@@ -23,9 +21,10 @@ platform :ios do
   end
 
   desc "Distribution of AppStore build"
-  lane :store_build  do |options|
-    select_xcode
-    update_team
+  lane :store_build do |options|
+    select_xcode(options)
+    update_team(options)
+    import_certificates_and_provisioning_profile(options)
     configuration = 'Release'
     if options[:configuration]
       configuration = options[:configuration]
@@ -42,8 +41,9 @@ platform :ios do
 
   desc "Distribution of AdHoc build"
   lane :adhoc_build do |options|
-    select_xcode
-    update_team
+    select_xcode(options)
+    update_team(options)
+    import_certificates_and_provisioning_profile(options)
     configuration = 'Debug'
     if options[:configuration]
       configuration = options[:configuration]
@@ -60,14 +60,37 @@ platform :ios do
   end
 
   private_lane :update_team do |options|
-    #update_project_team(
-    #  path: "github-actions-examples.xcodeproj",
-    #  teamid: ENV.fetch("TEAM_ID") { "TEAM_ID" }
-    #)
+    update_project_team(
+      path: "github-actions-examples.xcodeproj",
+      teamid: ENV.fetch("TEAM_ID") { "TEAM_ID" }
+    )
   end
 
   desc "select common xcode version"
-  private_lane :select_xcode do
+  private_lane :select_xcode do |options|
+    USE_XCODE_VERSION = "11.5"
     xcversion(version: USE_XCODE_VERSION)
+  end
+
+  desc "Import Certificates and Provisioning Profile"
+  private_lane :import_certificates_and_provisioning_profile do |options|
+    keychain_password = ENV.fetch("KEYCHAIN_PASSWORD") { "" }
+    cert_password = ENV.fetch("CERT_PASSWORD") { "" }
+    certificate_path = options[:certificate_path] || "ios_distribution.p12"
+    provisioning_profile = options[:provisioning_profile] || "githubactionsexamples.mobileprovision"
+    keychain_name = options[:keychain_name] || "github-actions-examples-chain"
+    if options[:create_new_keychain]
+      create_keychain(
+        name: keychain_name,
+        password: keychain_password,
+      )
+    end
+    import_certificate(
+      certificate_path: certificate_path,
+      certificate_password: cert_password,
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+    )
+    install_provisioning_profile(path: provisioning_profile)
   end
 end

@@ -5,32 +5,57 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.012741">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.008977">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: cocoapods" time="2.841235">
+      <testcase classname="fastlane.lanes" name="01: cocoapods" time="2.320487">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: Switch to ios select_xcode lane" time="0.001897">
+      <testcase classname="fastlane.lanes" name="02: Switch to ios select_xcode lane" time="0.001937">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: xcversion" time="0.498115">
+      <testcase classname="fastlane.lanes" name="03: xcversion" time="0.313209">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: Switch to ios update_team lane" time="0.001865">
+      <testcase classname="fastlane.lanes" name="04: Switch to ios update_team lane" time="0.003187">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: build_app" time="28.508615">
+      <testcase classname="fastlane.lanes" name="05: update_project_team" time="0.215941">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="06: Switch to ios import_certificates_and_provisioning_profile lane" time="0.002738">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="07: create_keychain" time="0.123168">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="08: import_certificate" time="0.270692">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="09: install_provisioning_profile" time="0.15626">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: build_app" time="34.617471">
         
       </testcase>
     
