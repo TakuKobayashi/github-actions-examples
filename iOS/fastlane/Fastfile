@@ -22,11 +22,7 @@ platform :ios do
 
   desc "Distribution of AppStore build"
   lane :store_build do |options|
-    select_xcode(options)
-    if options[:team_id]
-      update_team(options)
-    end
-    import_certificates_and_provisioning_profile(options)
+    setup_build_common(options)
     configuration = 'Release'
     if options[:configuration]
       configuration = options[:configuration]
@@ -44,17 +40,13 @@ platform :ios do
 
   desc "Distribution of AdHoc build"
   lane :adhoc_build do |options|
-    select_xcode(options)
-    if options[:team_id]
-      update_team(options)
-    end
-    import_certificates_and_provisioning_profile(options)
+    setup_build_common(options)
     configuration = 'Debug'
     if options[:configuration]
       configuration = options[:configuration]
     end
     scheme_name = options[:scheme] || "github-actions-examples"
-    build_app(
+    build_app({
       configuration: configuration,
       scheme: scheme_name,
       export_method: 'ad-hoc',
@@ -62,7 +54,15 @@ platform :ios do
       output_name: "#{scheme_name}-adhoc-#{configuration.downcase}.ipa",
       include_bitcode: true,
       clean: true
-    )
+    })
+  end
+
+  private_lane :setup_build_common do |options|
+    select_xcode(options)
+    if options[:team_id]
+      update_team(options)
+    end
+    import_certificates_and_provisioning_profile(options)
   end
 
   private_lane :update_team do |options|
