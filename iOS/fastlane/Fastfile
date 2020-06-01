@@ -105,6 +105,6 @@ platform :ios do
       keychain_name: keychain_name,
       keychain_password: keychain_password,
     )
-    install_provisioning_profile(path: provisioning_profile)
+    update_project_provisioning(profile: provisioning_profile)
   end
 end
