@@ -31,6 +31,7 @@ platform :ios do
     build_app({
       configuration: configuration,
       scheme: scheme_name,
+      xcargs: "-allowProvisioningUpdates",
       export_method: "app-store",
       output_name: "#{scheme_name}-store-#{configuration}.ipa",
       include_bitcode: true,
