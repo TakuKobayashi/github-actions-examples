@@ -22,17 +22,17 @@ platform :ios do
 
   desc "Distribution of AppStore build"
   lane :store_build do |options|
+    p "------------------------------------"
+    p options
     setup_build_common(options)
     configuration = 'Release'
     if options[:configuration]
       configuration = options[:configuration]
     end
-    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
     scheme_name = options[:scheme] || "github-actions-examples"
     build_app({
-      project: xcodeproject_path,
-      scheme: scheme_name,
       configuration: configuration,
+      scheme: scheme_name,
       export_method: "app-store",
       output_name: "#{scheme_name}-store-#{configuration}.ipa",
       include_bitcode: true,
@@ -42,17 +42,17 @@ platform :ios do
 
   desc "Distribution of AdHoc build"
   lane :adhoc_build do |options|
+    p "------------------------------------"
+    p options
     setup_build_common(options)
     configuration = 'Debug'
     if options[:configuration]
       configuration = options[:configuration]
     end
-    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
     scheme_name = options[:scheme] || "github-actions-examples"
     build_app({
-      project: xcodeproject_path,
-      scheme: scheme_name,
       configuration: configuration,
+      scheme: scheme_name,
       export_method: 'ad-hoc',
       export_xcargs: '-allowProvisioningUpdates',
       output_name: "#{scheme_name}-adhoc-#{configuration}.ipa",
