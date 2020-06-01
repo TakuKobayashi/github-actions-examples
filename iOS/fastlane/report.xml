@@ -5,57 +5,52 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.008977">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.011624">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: cocoapods" time="2.320487">
+      <testcase classname="fastlane.lanes" name="1: cocoapods" time="2.831386">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: Switch to ios select_xcode lane" time="0.001937">
+      <testcase classname="fastlane.lanes" name="2: Switch to ios select_xcode lane" time="0.002091">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: xcversion" time="0.313209">
+      <testcase classname="fastlane.lanes" name="3: xcversion" time="0.340167">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: Switch to ios update_team lane" time="0.003187">
+      <testcase classname="fastlane.lanes" name="4: Switch to ios update_team lane" time="0.001867">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: update_project_team" time="0.215941">
+      <testcase classname="fastlane.lanes" name="5: update_project_team" time="0.198108">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: Switch to ios import_certificates_and_provisioning_profile lane" time="0.002738">
+      <testcase classname="fastlane.lanes" name="6: Switch to ios import_certificates_and_provisioning_profile lane" time="0.001935">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: create_keychain" time="0.123168">
+      <testcase classname="fastlane.lanes" name="7: import_certificate" time="0.165893">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: import_certificate" time="0.270692">
+      <testcase classname="fastlane.lanes" name="8: install_provisioning_profile" time="0.129686">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: install_provisioning_profile" time="0.15626">
-        
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="10: build_app" time="34.617471">
+      <testcase classname="fastlane.lanes" name="9: build_app" time="23.431442">
         
       </testcase>
     

@@ -23,17 +23,20 @@ platform :ios do
   desc "Distribution of AppStore build"
   lane :store_build do |options|
     select_xcode(options)
-    update_team(options)
+    if options[:team_id]
+      update_team(options)
+    end
     import_certificates_and_provisioning_profile(options)
     configuration = 'Release'
     if options[:configuration]
       configuration = options[:configuration]
     end
+    scheme_name = options[:scheme] || "github-actions-examples"
     build_app({
       configuration: configuration,
-      scheme: "github-actions-examples",
+      scheme: scheme_name,
       export_method: "app-store",
-      output_name: "github-actions-examples-store-#{configuration.downcase}.ipa",
+      output_name: "#{scheme_name}-store-#{configuration.downcase}.ipa",
       include_bitcode: true,
       clean: true,
     })
@@ -42,34 +45,39 @@ platform :ios do
   desc "Distribution of AdHoc build"
   lane :adhoc_build do |options|
     select_xcode(options)
-    update_team(options)
+    if options[:team_id]
+      update_team(options)
+    end
     import_certificates_and_provisioning_profile(options)
     configuration = 'Debug'
     if options[:configuration]
       configuration = options[:configuration]
     end
+    scheme_name = options[:scheme] || "github-actions-examples"
     build_app(
       configuration: configuration,
-      scheme: "github-actions-examples",
+      scheme: scheme_name,
       export_method: 'ad-hoc',
       export_xcargs: '-allowProvisioningUpdates',
-      output_name: "github-actions-examples-adhoc-#{configuration.downcase}.ipa",
+      output_name: "#{scheme_name}-adhoc-#{configuration.downcase}.ipa",
       include_bitcode: true,
       clean: true
     )
   end
 
   private_lane :update_team do |options|
+    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
+    team_id = options[:team_id]
     update_project_team(
-      path: "github-actions-examples.xcodeproj",
-      teamid: ENV.fetch("TEAM_ID") { "TEAM_ID" }
+      path: xcodeproject_path,
+      teamid: team_id
     )
   end
 
   desc "select common xcode version"
   private_lane :select_xcode do |options|
-    USE_XCODE_VERSION = "11.5"
-    xcversion(version: USE_XCODE_VERSION)
+    use_xcode_version = options[:xcode_version] || "11.5"
+    xcversion(version: use_xcode_version)
   end
 
   desc "Import Certificates and Provisioning Profile"
