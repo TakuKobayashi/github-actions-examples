@@ -13,6 +13,8 @@ jobs:
         provisioning-profile-filepath: [githubactionsexamplesstorebuild20200531.mobileprovision]
         build-scheme: [github-actions-examples]
         xcodeproject-path: [github-actions-examples.xcodeproj]
+        keychain-name: [github-actions-examples-chain]
+        certificate-path: [ios_distribution.p12]
 
     steps:
     - uses: actions/checkout@v2
@@ -56,7 +58,7 @@ jobs:
         echo "CERT_PASSWORD=${CERT_PASSWORD}" >> ./fastlane/.env
     - name: Android Release aab Build
       working-directory: ./iOS
-      run: fastlane ios store_build scheme:${{ matrix.build-scheme }} xcode_version:${{ matrix.xcode-version }} configuration:${{ matrix.build-configuration }} provisioning_profile:${{ matrix.provisioning-profile-filepath }} xcodeproject_path:${{ matrix.xcodeproject-path }} team_id:${{ secrets.IOS_TEAM_ID }} --verbose
+      run: fastlane ios store_build scheme:${{ matrix.build-scheme }} xcode_version:${{ matrix.xcode-version }} configuration:${{ matrix.build-configuration }} provisioning_profile:${{ matrix.provisioning-profile-filepath }} xcodeproject_path:${{ matrix.xcodeproject-path }} team_id:${{ secrets.IOS_TEAM_ID }} keychain_name:${{ matrix.keychain-name }} certificate_path:${{ matrix.certificate-path }} create_new_keychain:true --verbose
     - uses: actions/upload-artifact@master
       with:
         name: result
