@@ -32,7 +32,7 @@ platform :ios do
       configuration: configuration,
       scheme: scheme_name,
       export_method: "app-store",
-      output_name: "#{scheme_name}-store-#{configuration.downcase}.ipa",
+      output_name: "#{scheme_name}-store-#{configuration}.ipa",
       include_bitcode: true,
       clean: true,
     })
@@ -51,7 +51,7 @@ platform :ios do
       scheme: scheme_name,
       export_method: 'ad-hoc',
       export_xcargs: '-allowProvisioningUpdates',
-      output_name: "#{scheme_name}-adhoc-#{configuration.downcase}.ipa",
+      output_name: "#{scheme_name}-adhoc-#{configuration}.ipa",
       include_bitcode: true,
       clean: true
     })
