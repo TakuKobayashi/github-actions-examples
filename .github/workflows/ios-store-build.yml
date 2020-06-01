@@ -50,7 +50,7 @@ jobs:
       run: |
         echo "KEYCHAIN_PASSWORD=${KEYCHAIN_PASSWORD}" >> ./fastlane/.env
         echo "CERT_PASSWORD=${CERT_PASSWORD}" >> ./fastlane/.env
-    - name: fastlane ios build
+    - name: execute fastlane ios build
       working-directory: ./iOS
       run: bundle exec fastlane ios store_build scheme:${{ matrix.build-scheme }} xcode_version:${{ matrix.xcode-version }} configuration:${{ matrix.build-configuration }} provisioning_profile:${{ matrix.provisioning-profile-filepath }} xcodeproject_path:${{ matrix.xcodeproject-path }} team_id:${{ secrets.IOS_TEAM_ID }} keychain_name:${{ matrix.keychain-name }} certificate_path:${{ matrix.certificate-path }} create_new_keychain:true --verbose
     - uses: actions/upload-artifact@master
