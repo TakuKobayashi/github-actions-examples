@@ -88,7 +88,7 @@ platform :ios do
 
   desc "Import Certificates and Provisioning Profile"
   private_lane :import_certificates_and_provisioning_profile do |options|
-    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
+    scheme_name = options[:scheme] || "github-actions-examples"
     keychain_password = ENV.fetch("KEYCHAIN_PASSWORD") { "" }
     cert_password = ENV.fetch("CERT_PASSWORD") { "" }
     certificate_path = options[:certificate_path] || "ios_distribution.p12"
@@ -106,10 +106,10 @@ platform :ios do
       keychain_name: keychain_name,
       keychain_password: keychain_password,
     )
-    update_project_provisioning(
-      xcodeproj: xcodeproject_path,
-      profile: provisioning_profile,
-      build_configuration: "Release",
+    automatic_code_signing(
+      targets: scheme_name,
+      use_automatic_signing: false
     )
+#    update_project_provisioning(profile: provisioning_profile)
   end
 end
