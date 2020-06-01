@@ -27,11 +27,12 @@ platform :ios do
     if options[:configuration]
       configuration = options[:configuration]
     end
+    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
     scheme_name = options[:scheme] || "github-actions-examples"
     build_app({
-      configuration: configuration,
+      project: xcodeproject_path,
       scheme: scheme_name,
-      xcargs: "-allowProvisioningUpdates",
+      configuration: configuration,
       export_method: "app-store",
       output_name: "#{scheme_name}-store-#{configuration}.ipa",
       include_bitcode: true,
@@ -46,10 +47,12 @@ platform :ios do
     if options[:configuration]
       configuration = options[:configuration]
     end
+    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
     scheme_name = options[:scheme] || "github-actions-examples"
     build_app({
-      configuration: configuration,
+      project: xcodeproject_path,
       scheme: scheme_name,
+      configuration: configuration,
       export_method: 'ad-hoc',
       export_xcargs: '-allowProvisioningUpdates',
       output_name: "#{scheme_name}-adhoc-#{configuration}.ipa",
