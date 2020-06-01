@@ -37,6 +37,7 @@ platform :ios do
       output_name: "#{scheme_name}-store-#{configuration}.ipa",
       include_bitcode: true,
       clean: true,
+      workspace: "github-actions-examples.xcworkspace",
     })
   end
 
@@ -57,7 +58,8 @@ platform :ios do
       export_xcargs: '-allowProvisioningUpdates',
       output_name: "#{scheme_name}-adhoc-#{configuration}.ipa",
       include_bitcode: true,
-      clean: true
+      clean: true,
+      workspace: "github-actions-examples.xcworkspace",
     })
   end
 
