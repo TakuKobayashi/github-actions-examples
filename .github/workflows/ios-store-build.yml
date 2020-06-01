@@ -35,13 +35,13 @@ jobs:
       env:
         IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64 }}
       run: |
-        echo ${IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64} | base64 -d > ./ios_distribution.p12
+        echo ${IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64} | base64 -d > ${{ matrix.certificate-path }}
     - name: Decode base64 provisioning profile
       working-directory: ./iOS
       env:
         IOS_STORE_MOBILEPROVISION_FILE_BASE64: ${{ secrets.IOS_STORE_MOBILEPROVISION_FILE_BASE64 }}
       run: |
-        echo ${IOS_STORE_MOBILEPROVISION_FILE_BASE64} | base64 -d > ./${{ matrix.provisioning-profile-filepath }}
+        echo ${IOS_STORE_MOBILEPROVISION_FILE_BASE64} | base64 -d > ${{ matrix.provisioning-profile-filepath }}
     - name: Setup Fastlane Build .env
       working-directory: ./iOS
       env:
