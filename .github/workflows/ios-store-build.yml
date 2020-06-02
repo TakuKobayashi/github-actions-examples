@@ -23,7 +23,7 @@ jobs:
         ruby-version: '2.6'
     - name: Install Bundler
       working-directory: ./iOS
-      run: gem install bundler
+      run: gem update bundler
     - name: Bundle Install
       working-directory: ./iOS
       run: bundle install
