@@ -109,7 +109,7 @@ platform :ios do
     )
     update_project_provisioning(
       xcodeproj: xcodeproject_path,
-      profile: certificate_path, # optional if you use sigh
+      profile: provisioning_profile, # optional if you use sigh
       build_configuration: "Release",
       certificate: "ios_distribution.cer" # optionally specify the codesigning identity
     )
