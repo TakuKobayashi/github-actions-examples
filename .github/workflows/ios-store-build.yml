@@ -36,6 +36,12 @@ jobs:
         IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64: ${{ secrets.IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64 }}
       run: |
         echo ${IOS_DISTRIBUTION_CERTIFICATE_P12_FILE_BASE64} | base64 -d > ${{ matrix.certificate-path }}
+    - name: Decode base64 certificates
+      working-directory: ./iOS
+      env:
+        IOS_STORE_CERTIFICATES_FILE_BASE64: ${{ secrets.IOS_STORE_CERTIFICATES_FILE_BASE64 }}
+      run: |
+        echo ${IOS_STORE_CERTIFICATES_FILE_BASE64} | base64 -d > ios_distribution.cer
     - name: Decode base64 provisioning profile
       working-directory: ./iOS
       env:
