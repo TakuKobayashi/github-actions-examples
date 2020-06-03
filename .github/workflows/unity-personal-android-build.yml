@@ -20,7 +20,7 @@ jobs:
       - name: setup ubuntu
         run: |
           sudo apt-get --quiet update --yes
-      - uses: webbertakken/unity-builder@v1
+      - uses: webbertakken/unity-builder@v1.0
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
