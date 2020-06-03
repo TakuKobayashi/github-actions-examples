@@ -12,7 +12,7 @@ jobs:
         projectPath:
           - Unity/
         unityVersion:
-          - 2019.3.15f1
+          - 2019.2.11f1
         targetPlatform:
           - WebGL
     steps:
