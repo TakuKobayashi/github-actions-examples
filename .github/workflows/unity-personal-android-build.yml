@@ -25,7 +25,18 @@ jobs:
         uses: webbertakken/unity-request-manual-activation-file@v1.1
         with:
           unityVersion: ${{ matrix.unityVersion }}
+      - uses: pCYSl5EDgo/cat@master
+        id: license
+        with:
+          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+      - uses: webbertakken/unity-builder@v1.0
+        env:
+          UNITY_LICENSE: ${{ steps.license.outputs.text }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v1
         with:
-          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          name: Build
+          path: build
