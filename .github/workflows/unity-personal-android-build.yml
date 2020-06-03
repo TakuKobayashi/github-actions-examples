@@ -12,16 +12,17 @@ jobs:
         projectPath:
           - Unity/
         unityVersion:
-          - 2019.2.11f1
+          - 2019.3.15f1
         targetPlatform:
-          - WebGL # WebGL.
+          - WebGL
     steps:
-      - uses: actions/checkout@v1.1
-      - name: Unity - Activate
-        uses: webbertakken/unity-activate@v1
+      - uses: actions/checkout@v2
+      - name: setup ubuntu
+        run: |
+          sudo apt-get --quiet update --yes
+      - uses: webbertakken/unity-builder@v1
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-      - uses: webbertakken/unity-builder@v0.5
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
