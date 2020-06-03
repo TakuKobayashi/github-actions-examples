@@ -345,6 +345,5 @@ Library_iOS
 Library_Android
 
 Logs/*.log
-Packages/manifest.json
 
 *.cache
