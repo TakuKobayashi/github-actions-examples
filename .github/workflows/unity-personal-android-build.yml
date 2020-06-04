@@ -20,18 +20,9 @@ jobs:
       - name: setup ubuntu
         run: |
           sudo apt-get --quiet update --yes
-      - name: Request manual activation file
-        id: getManualLicenseFile
-        uses: webbertakken/unity-request-manual-activation-file@v1.1
-        with:
-          unityVersion: ${{ matrix.unityVersion }}
-      - uses: pCYSl5EDgo/cat@master
-        id: license
-        with:
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
       - uses: webbertakken/unity-builder@v1.0
         env:
-          UNITY_LICENSE: ${{ steps.license.outputs.text }}
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
