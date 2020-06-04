@@ -29,9 +29,6 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-      - name: Return license
-        uses: webbertakken/unity-return-license@v1
-        if: always()
       - uses: actions/upload-artifact@v1
         with:
           name: Build
