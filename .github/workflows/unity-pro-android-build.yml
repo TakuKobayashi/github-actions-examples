@@ -12,14 +12,15 @@ jobs:
         projectPath:
           - Unity/
         unityVersion:
-          - 2019.2.11f1
+          - 2019.2.17f1
         targetPlatform:
-          - WebGL
+          - Android
     steps:
       - uses: actions/checkout@v2
       - name: setup ubuntu
         run: |
           sudo apt-get --quiet update --yes
+          sudo apt-get --quiet upgrade --yes
       - uses: webbertakken/unity-builder@v1.0
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
