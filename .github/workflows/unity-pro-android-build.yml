@@ -20,12 +20,6 @@ jobs:
       - name: setup ubuntu
         run: |
           sudo apt-get --quiet update --yes
-      - name: Activate Unity
-        uses: webbertakken/unity-activate@v1.2
-        env:
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
       - uses: webbertakken/unity-builder@v1.0
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
