@@ -1,0 +1,44 @@
+name: Build project
+
+on: [push]
+
+jobs:
+  buildForSomePlatforms:
+    name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Unity/
+        unityVersion:
+          - 2019.2.11f1
+        targetPlatform:
+          - WebGL
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup ubuntu
+        run: |
+          sudo apt-get --quiet update --yes
+      - name: Activate Unity
+        uses: webbertakken/unity-activate@v1.2
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      - uses: webbertakken/unity-builder@v1.0
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+      - name: Return license
+        uses: webbertakken/unity-return-license@v1
+        if: always()
+      - uses: actions/upload-artifact@v1
+        with:
+          name: Build
+          path: build
