@@ -1,9 +1,9 @@
 name: Firebase Functions Deploy
 
 on:
-  pull_request:
+  push:
     branches:
-      - master
+    - master
 
 jobs:
   build:
