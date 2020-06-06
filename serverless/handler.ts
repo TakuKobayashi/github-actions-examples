@@ -1,7 +1,7 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyHandler, APIGatewayEvent, Context } from 'aws-lambda';
 import 'source-map-support/register';
 
-export const hello: APIGatewayProxyHandler = async (event, _context) => {
+export const hello: APIGatewayProxyHandler = async (event: APIGatewayEvent, _context: Context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -10,3 +10,17 @@ export const hello: APIGatewayProxyHandler = async (event, _context) => {
     }, null, 2),
   };
 }
+
+import * as awsServerlessExpress from 'aws-serverless-express';
+import * as express from 'express';
+
+const app = express();
+const server = awsServerlessExpress.createServer(app);
+
+app.get('/', (req, res) => {
+  res.json({ hello: 'world' });
+});
+
+export const api: APIGatewayProxyHandler = (event: APIGatewayEvent, context: Context) => {
+  awsServerlessExpress.proxy(server, event, context);
+};

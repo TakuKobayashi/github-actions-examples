@@ -20,3 +20,9 @@ functions:
       - http:
           method: get
           path: hello
+
+  app:
+    handler: handler.api
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
