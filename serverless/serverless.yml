@@ -6,6 +6,7 @@ service:
 # Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 provider:
   name: aws
@@ -19,3 +20,9 @@ functions:
       - http:
           method: get
           path: hello
+
+  api:
+    handler: handler.api
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
