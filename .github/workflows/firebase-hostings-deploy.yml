@@ -15,7 +15,7 @@ jobs:
         node-version: [10.x]
 
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkoutv2
       - name: setup ubuntu
         run: sudo apt-get --quiet update --yes
       - name: Use Node.js ${{ matrix.node-version }}
@@ -31,7 +31,7 @@ jobs:
         run: |
           yarn run build
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: hosting-build
           path: ./firebase/firebase-hosting-example/build
@@ -41,11 +41,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       - name: Download Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: hosting-build
+      - name: ls -a
+        run: ls -a
       - name: copy hosting-build to firebase/public
         run: |
           mv -f ./hosting-build/* ./firebase/public/
