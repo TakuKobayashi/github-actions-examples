@@ -21,7 +21,7 @@ functions:
           method: get
           path: hello
 
-  app:
+  api:
     handler: handler.api
     events:
       - http: ANY /
