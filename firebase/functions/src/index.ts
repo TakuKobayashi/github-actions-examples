@@ -3,6 +3,7 @@ import * as express from 'express';
 
 // When serve localhost, access below
 // http://localhost:5000/githubactionsexamples/asia-northeast1/helloWorld
+// and generate new functions[helloWorld]
 export const helloWorld = region("asia-northeast1").https.onRequest((request: Request, response: Response) => {
   response.send("Hello from Firebase!!!");
 });
@@ -16,4 +17,5 @@ app.get('/', (req, res) => {
 
 // When serve localhost, access below
 // http://localhost:5000/githubactionsexamples/asia-northeast1/api
+// and generate new functions[api]
 export const api = region('asia-northeast1').https.onRequest(app);
