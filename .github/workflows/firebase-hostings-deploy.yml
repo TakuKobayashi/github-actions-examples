@@ -46,11 +46,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: hosting-build
-      - name: ls -a
-        run: ls -a
-      - name: copy hosting-build to firebase/public
-        run: |
-          mv -f ./hosting-build/* ./firebase/public/
+          path: ./firebase/public
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
