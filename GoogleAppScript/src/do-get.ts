@@ -23,4 +23,4 @@ export function doGet(e: any): GoogleAppsScript.Content.TextOutput {
   jsonOut.setMimeType(ContentService.MimeType.JSON);
   jsonOut.setContent(JSON.stringify(resultObject));
   return jsonOut;
-};
+}

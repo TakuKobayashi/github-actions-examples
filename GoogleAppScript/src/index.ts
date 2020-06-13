@@ -1,9 +1,9 @@
-import { doGet } from "./do-get"
+import { doGet } from './do-get';
 
 declare const global: {
-  [x: string]: any ;
-}
+  [x: string]: any;
+};
 
-global.doGet = function(e: any) {
-  return doGet(e)
-}
+global.doGet = function (e: any) {
+  return doGet(e);
+};
