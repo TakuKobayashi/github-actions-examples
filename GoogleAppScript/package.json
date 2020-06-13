@@ -1,0 +1,38 @@
+{
+  "name": "japan-hot-spring-hotel-database",
+  "version": "1.0.0",
+  "description": "clasp Google App Script using Typescript",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "webpack",
+    "build:production": "webpack --mode production",
+    "build:development": "webpack --mode development",
+    "push": "yarn run build:production && clasp push",
+    "watch": "watch 'yarn run build && yarn run push' src/",
+    "format": "prettier --config .prettierrc --write 'src/**/*.{ts,js}'",
+    "clasp": "clasp",
+    "deploy": "yarn run push && clasp deploy",
+    "undeploy:latest": "clasp undeploy",
+    "undeploy:all": "clasp undeploy --all",
+    "open": "clasp open",
+    "open:webapp": "clasp open --webapp"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
+    "@google/clasp": "^2.3.0",
+    "@types/google-apps-script": "^1.0.14",
+    "babel-loader": "^8.1.0",
+    "dotenv-webpack": "^1.8.0",
+    "es3ify-webpack-plugin": "^0.1.0",
+    "gas-webpack-plugin": "^1.0.2",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.5",
+    "watch": "^1.0.2",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "license": "MIT"
+}
