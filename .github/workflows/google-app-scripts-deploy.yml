@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+    - master
+
+name: Google App Script Deploy
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x]
+        clasprc-json-path: [~/.clasprc.json]
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup ubuntu
+      run: sudo apt-get --quiet update --yes
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: yarn install
+      working-directory: ./GoogleAppScript
+      run: yarn install
+    - name: clasp creds
+      env:
+        CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+      run: echo "${CLASPRC_JSON}" >> ${{ matrix.clasprc-json-path }}
+    - name: clasp deploy
+      working-directory: ./GoogleAppScript
+      run: yarn run deploy
+    - uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: GoogleAppScript/dist
