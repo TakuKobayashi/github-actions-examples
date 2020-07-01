@@ -1,9 +1,7 @@
-name: Android NDK Debug Build
+name: Android NDK Release Build
 
 on:
   push:
-    branches:
-    - master
 
 jobs:
   build:
@@ -51,9 +49,23 @@ jobs:
       working-directory: ./AndroidNDK
       run: |
         echo "ndk.dir=$PWD/android-sdk-linux/ndk/${{ matrix.ndk-version }}" >> ./local.properties
-    - name: Android Debug Build
+    - name: Setup Build Configs
       working-directory: ./AndroidNDK
-      run: ./gradlew assembleDebug
+      env:
+        ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
+        ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
+      run: |
+        echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
+        echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
+        echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+        echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
+        echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+    - name: Android Release Apk Build
+      working-directory: ./AndroidNDK
+      run: ./gradlew assembleRelease
+    - name: Android Release aab Build
+      working-directory: ./AndroidNDK
+      run: ./gradlew bundleRelease
     - uses: actions/upload-artifact@master
       with:
         name: outputs
