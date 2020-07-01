@@ -1,0 +1,58 @@
+name: Android Debug Build
+
+on:
+  push:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compile-sdk: [30]
+        build-tools: [30.0.0]
+        sdk-tools:   [4333796]
+        ndk-version: [21.0.6113669]
+        cmake-version: [3.10.2.4988404]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: setup ubuntu
+      run: |
+        sudo apt-get --quiet update --yes
+        sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+    - name: setup JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: download Android SDK
+      working-directory: ./AndroidNDK
+      run: |
+        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.sdk-tools }}.zip
+        unzip -d android-sdk-linux android-sdk.zip
+        sudo mkdir -p /root/.android
+        sudo touch /root/.android/repositories.cfg
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
+        export ANDROID_HOME=$PWD/android-sdk-linux
+        export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+        chmod +x ./gradlew
+        set +o pipefail
+        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+        set -o pipefail
+    - name: install Android ndk
+      working-directory: ./AndroidNDK
+      run: android-sdk-linux/tools/bin/sdkmanager --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
+    - name: Insert NDK path
+      working-directory: ./AndroidNDK
+      run: |
+        echo "ndk.dir=$PWD/android-sdk-linux/ndk/${{ matrix.ndk-version }}" >> ./local.properties
+    - name: Android Debug Build
+      working-directory: ./AndroidNDK
+      run: ./gradlew assembleDebug
+    - uses: actions/upload-artifact@master
+      with:
+        name: outputs
+        path: AndroidNDK/app/build/outputs/
