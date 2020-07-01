@@ -273,3 +273,4 @@ firebase-debug.log*
 # .firebaserc
 
 **/dist/*.js
+.cxx

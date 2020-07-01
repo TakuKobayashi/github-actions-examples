@@ -1,4 +1,4 @@
-name: Android Debug Build
+name: Android NDK Release Build
 
 on:
   push:
@@ -15,6 +15,8 @@ jobs:
         compile-sdk: [30]
         build-tools: [30.0.0]
         sdk-tools:   [4333796]
+        ndk-version: [21.0.6113669]
+        cmake-version: [3.10.2.4988404]
 
     steps:
     - uses: actions/checkout@v1
@@ -27,7 +29,7 @@ jobs:
       with:
         java-version: 1.8
     - name: download Android SDK
-      working-directory: ./Android
+      working-directory: ./AndroidNDK
       run: |
         wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.sdk-tools }}.zip
         unzip -d android-sdk-linux android-sdk.zip
@@ -42,10 +44,31 @@ jobs:
         set +o pipefail
         yes | android-sdk-linux/tools/bin/sdkmanager --licenses
         set -o pipefail
-    - name: Android Debug Build
-      working-directory: ./Android
-      run: ./gradlew assembleDebug
+    - name: install Android NDK
+      working-directory: ./AndroidNDK
+      run: android-sdk-linux/tools/bin/sdkmanager --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
+    - name: Insert NDK path
+      working-directory: ./AndroidNDK
+      run: |
+        echo "ndk.dir=$PWD/android-sdk-linux/ndk/${{ matrix.ndk-version }}" >> ./local.properties
+    - name: Setup Build Configs
+      working-directory: ./AndroidNDK
+      env:
+        ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
+        ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
+      run: |
+        echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
+        echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
+        echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+        echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
+        echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+    - name: Android Release Apk Build
+      working-directory: ./AndroidNDK
+      run: ./gradlew assembleRelease
+    - name: Android Release aab Build
+      working-directory: ./AndroidNDK
+      run: ./gradlew bundleRelease
     - uses: actions/upload-artifact@master
       with:
         name: outputs
-        path: Android/app/build/outputs/
+        path: AndroidNDK/app/build/outputs/
