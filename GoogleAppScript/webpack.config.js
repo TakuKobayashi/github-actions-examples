@@ -6,11 +6,11 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   devtool: 'inline-source-map',
   entry: {
-    main: path.resolve(__dirname, 'src', 'index.ts')
+    main: path.resolve(__dirname, 'src', 'webapi', 'webapi.ts')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js'
+    filename: 'webapi.js'
   },
   resolve: {
     extensions: ['.ts', '.js']
