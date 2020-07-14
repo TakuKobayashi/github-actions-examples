@@ -9,7 +9,7 @@ module.exports = {
     main: path.resolve(__dirname, 'src', 'webapi', 'webapi.ts')
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'src'),
     filename: 'webapi.js'
   },
   resolve: {
