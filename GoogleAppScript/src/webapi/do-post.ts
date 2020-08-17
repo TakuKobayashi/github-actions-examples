@@ -22,13 +22,27 @@ export function doPost(e: any): GoogleAppsScript.Content.TextOutput {
     if (!sheet) {
       continue;
     }
+    // Sheet内のJSONData
+    const sheetData = data[sheetName];
+    const updateTargetRowsValuesList: { [n: number]: any }[] = [];
+    if (sheet.getLastColumn() <= 0){
+      const dataHeaderPairs: { [s: string]: any } = {}
+      for (let i = 0; i < sheetData.length; ++i) {
+        const rowData = sheetData[i];
+        const rowKeys = Object.keys(rowData);
+        for (let j = 0; j < rowKeys.length; ++j){
+          const rowKey = rowKeys[j];
+          if(!dataHeaderPairs[rowKey]){
+            dataHeaderPairs[rowKey] = j + 1;
+          }
+        }
+      }
+      updateHeaderValues(sheet, dataHeaderPairs, dataKeysColumnRow);
+    }
     const headerPairs = getKeyNumberPairs(sheet, dataKeysColumnRow);
     const headerValues = Object.values(headerPairs);
     let nextKeyNumber = headerValues.length > 0 ? Math.max(...headerValues) : 0;
     let maxColumnNumber = 1;
-    // Sheet内のJSONData
-    const sheetData = data[sheetName];
-    const updateTargetRowsValuesList: { [n: number]: any }[] = [];
     // 1行分のObject
     for (let i = 0; i < sheetData.length; ++i) {
       const rowData = sheetData[i];
@@ -68,7 +82,6 @@ export function doPost(e: any): GoogleAppsScript.Content.TextOutput {
       }
     }
     targetRowsRange.setValues(targetRowsValues);
-    updateHeaderValues(sheet, headerPairs, dataKeysColumnRow);
   }
   const jsonOut = ContentService.createTextOutput();
   //Mime TypeをJSONに設定
