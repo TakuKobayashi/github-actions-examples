@@ -33,7 +33,7 @@ jobs:
       run: yarn run build
     - name: npm install, build
       working-directory: ./react-web
-      run: curl -X GET -L https://script.google.com/macros/s/AKfycbwEmyz0Y2IUiN-EPqLoFoaUbQ5z5fAcnUWlGAdhr8ujAUu4Dizl74NKqkKxK6TqKWTuSg/exec > build/${{ matrix.deploy-mst-json-path }}
+      run: curl -X GET -L https://script.google.com/macros/s/AKfycbzKoorJ9Cj_DpxhuP4r7pjDsii0htaQFuX9P0Caucs4S0skqtPeTdLf8U4Y2h7_uKOd2Q/exec > build/${{ matrix.deploy-mst-json-path }}
     - name: deploy
       uses: peaceiris/actions-gh-pages@v2.5.0
       env:
