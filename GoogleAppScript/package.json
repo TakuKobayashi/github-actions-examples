@@ -1,5 +1,5 @@
 {
-  "name": "japan-hot-spring-hotel-database",
+  "name": "github-actions-examples",
   "version": "1.0.0",
   "description": "clasp Google App Script using Typescript",
   "main": "src/index.ts",
