@@ -3,7 +3,7 @@ name: react-web CI/CD
 on:
   push:
     branches:
-    - master
+    - web-deploy
 
 jobs:
   build-and-deploy-react-web:
