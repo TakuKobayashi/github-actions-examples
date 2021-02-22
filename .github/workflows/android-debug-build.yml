@@ -3,7 +3,7 @@ name: Android Debug Build
 on:
   push:
     branches:
-    - master
+    - android-build
 
 jobs:
   build:
