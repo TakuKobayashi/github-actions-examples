@@ -48,7 +48,7 @@ jobs:
     - name: start emulator
       working-directory: ./Android
       run: |
-        echo no | android-sdk-linux/tools/bin/sdkmanager create avd -n xamarin_android_emulator -k "system-images;android-${{ matrix.compile-sdk }};google_apis;x86" --force
+        echo no | android-sdk-linux/tools/bin/avdmanager create avd -n xamarin_android_emulator -k "system-images;android-${{ matrix.compile-sdk }};google_apis;x86" --force
         echo android-sdk-linux/emulator/emulator -list-avds
         echo "Starting emulator"
         nohup android-sdk-linux/emulator/emulator -avd xamarin_android_emulator -no-snapshot > /dev/null 2>&1 &
