@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-    - master
+    - gas-deploy
 
 name: Google App Script Deploy
 jobs:
