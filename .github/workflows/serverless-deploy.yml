@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-    - master
+    - serverless-deploy
 
 name: Serverless Deploy
 jobs:
