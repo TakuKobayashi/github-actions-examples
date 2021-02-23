@@ -1,25 +1,20 @@
-name: Unity Create ALF
-on:
-  push:
-
+name: Acquire activation file
+on: [push]
 jobs:
-  build:
-
+  activation:
+    name: Request manual activation file 🔑
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        unity-tag: [2019.4.14f1]
-    container: docker://gableroux/unity3d:${{ matrix.unity-tag }}
-
+        unity-tag: [2019.4.20f1]
     steps:
-    - uses: actions/checkout@v2
-    - name: setup ubuntu
-      run: |
-        sudo apt-get --quiet update --yes
-        sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
-    - run: /opt/Unity/Editor/Unity -quit -batchmode -nographics -logfile -createManualActivationFile || exit 0
-    - uses: actions/upload-artifact@master
+    - name: Request manual activation file
+      id: getManualLicenseFile
+      uses: game-ci/unity-request-manual-activation-file@v1.1
       with:
-        name: "Unity_v${{ matrix.unity-tag }}.alf"
-        path: artifact
+        unityVersion: ${{ matrix.unity-tag }}
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.getManualLicenseFile.outputs.filePath }}
+        path: ${{ steps.getManualLicenseFile.outputs.filePath }}
