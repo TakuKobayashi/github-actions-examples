@@ -25,40 +25,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: download Android SDK
-      working-directory: ./Android
-      run: |
-        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.sdk-tools }}.zip
-        unzip -d android-sdk-linux android-sdk.zip
-        sudo mkdir -p /root/.android
-        sudo touch /root/.android/repositories.cfg
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
-        export ANDROID_HOME=$PWD/android-sdk-linux
-        export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
-        chmod +x ./gradlew
-        set +o pipefail
-        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
-        set -o pipefail
-    - name: install emulator
-      working-directory: ./Android
-      run: |
-        echo y | android-sdk-linux/tools/bin/sdkmanager --install "system-images;android-${{ matrix.compile-sdk }};google_apis;x86"
-    - name: create emulator device
-      working-directory: ./Android
-      run: |
-        echo no | android-sdk-linux/tools/bin/avdmanager create avd -n test_android_emulator -k "system-images;android-${{ matrix.compile-sdk }};google_apis;x86" --force
-    - name: start emulator
-      working-directory: ./Android
-      run: |
-        android-sdk-linux/emulator/emulator -avd test_android_emulator -no-window -no-audio -no-snapshot &
-        android-sdk-linux/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-        android-sdk-linux/platform-tools/adb shell input keyevent 82 &
-    - name: execute test and report coverage
-      working-directory: ./Android
-      run: |
-        ./gradlew createDebugCoverageReport
+    - name: run tests
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 30
+        script: ./gradlew createDebugCoverageReport
     - uses: actions/upload-artifact@master
       with:
         name: outputs
