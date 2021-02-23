@@ -1,0 +1,20 @@
+name: Acquire activation file
+on: [push]
+jobs:
+  activation:
+    name: Request manual activation file 🔑
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        unity-tag: [2019.4.14f1]
+    steps:
+    - name: Request manual activation file
+      id: getManualLicenseFile
+      uses: game-ci/unity-request-activation-file@v1.2
+      with:
+        unityVersion: ${{ matrix.unity-tag }}
+    - name: Expose as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.getManualLicenseFile.outputs.filePath }}
+        path: ${{ steps.getManualLicenseFile.outputs.filePath }}
