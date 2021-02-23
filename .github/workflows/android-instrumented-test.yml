@@ -53,10 +53,7 @@ jobs:
       working-directory: ./Android
       run: |
         android-sdk-linux/emulator/emulator -avd test_android_emulator -no-window -no-audio -no-snapshot &
-        ls -l
-        ls -l android-sdk-linux/
-        ls -l android-sdk-linux/emulator/
-        android-sdk-linux/emulator/android-wait-for-emulator
+        android-sdk-linux/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
         android-sdk-linux/platform-tools/adb shell input keyevent 82 &
     - name: execute test and report coverage
       working-directory: ./Android
