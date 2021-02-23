@@ -1,12 +1,12 @@
 name: Acquire activation file
 on: [push]
-strategy:
-  matrix:
-    unity-tag: [2019.4.14f1]
 jobs:
   build:
     name: Build my project ✨
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        unity-tag: [2019.4.14f1]
     steps:
       # Checkout
       - name: Checkout repository
