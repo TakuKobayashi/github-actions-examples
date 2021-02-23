@@ -52,6 +52,7 @@ jobs:
     - name: start emulator
       working-directory: ./Android
       run: |
+        export ANDROID_SDK_ROOT=$PWD/android-sdk-linux
         android-sdk-linux/emulator/emulator -avd test_android_emulator -no-window -no-audio -no-snapshot &
         android-sdk-linux/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
         android-sdk-linux/platform-tools/adb shell input keyevent 82 &
