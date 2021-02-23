@@ -1,5 +1,7 @@
 name: Acquire activation file
 on: [push]
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 jobs:
   build:
     name: Build my project ✨
@@ -13,8 +15,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           lfs: true
-      - name: Set UNITY_LICENSE
-        run: echo "UNITY_LICENSE=${{ secrets.UNITY_LICENSE }}" >> $GITHUB_ENV
       # Cache
       - uses: actions/cache@v1.1.0
         with:
