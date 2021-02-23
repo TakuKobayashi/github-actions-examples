@@ -52,7 +52,7 @@ jobs:
     - name: start emulator
       working-directory: ./Android
       run: |
-        android-sdk-linux/emulator/emulator -avd test_android_emulator -no-window -no-audio -no-snapshot &
+        android-sdk-linux/emulator/emulator -avd test_android_emulator -no-window -no-audio &
         chmod +x ./android-wait-for-emulator.sh
         ./android-wait-for-emulator.sh
         android-sdk-linux/platform-tools/adb shell input keyevent 82 &
