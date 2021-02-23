@@ -22,7 +22,7 @@ jobs:
           key: Library
       # Build
       - name: Build project
-        uses: game-ci/unity-builder@v0.10
+        uses: game-ci/unity-builder@v1.5
         with:
           unityVersion: ${{ matrix.unity-tag }}
           targetPlatform: WebGL
