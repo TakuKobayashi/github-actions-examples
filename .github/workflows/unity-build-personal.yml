@@ -1,0 +1,33 @@
+name: Acquire activation file
+on: [push]
+strategy:
+  matrix:
+    unity-tag: [2019.4.14f1]
+jobs:
+  build:
+    name: Build my project ✨
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Set UNITY_LICENSE
+        run: echo "UNITY_LICENSE=${{ secrets.UNITY_LICENSE }}" >> $GITHUB_ENV
+      # Cache
+      - uses: actions/cache@v1.1.0
+        with:
+          path: Library
+          key: Library
+      # Build
+      - name: Build project
+        uses: game-ci/unity-builder@v0.10
+        with:
+          unityVersion: ${{ matrix.unity-tag }}
+          targetPlatform: WebGL
+      # Output
+      - uses: actions/upload-artifact@v1
+        with:
+          name: Build
+          path: build
