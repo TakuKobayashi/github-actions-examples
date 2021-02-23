@@ -48,13 +48,12 @@ jobs:
     - name: create emulator device
       working-directory: ./Android
       run: |
-        echo no | android-sdk-linux/tools/bin/avdmanager create avd -n test_android_emulator -k "system-images;android-${{ matrix.compile-sdk }};google_apis;x86" --force
+        echo no | android-sdk-linux/tools/bin/avdmanager create avd -n xamarin_android_emulator -k "system-images;android-${{ matrix.compile-sdk }};google_apis;x86" --force
     - name: start emulator
       working-directory: ./Android
       run: |
-        android-sdk-linux/emulator/emulator -avd test_android_emulator -no-skin -no-audio -no-window &
-        android-sdk-linux/platform-tools/android-wait-for-emulator
-        adb shell input keyevent 82 &
+        nohup android-sdk-linux/emulator/emulator -avd xamarin_android_emulator -no-snapshot > /dev/null 2>&1 &
+        android-sdk-linux/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
     - name: execute test and report coverage
       working-directory: ./Android
       run: |
