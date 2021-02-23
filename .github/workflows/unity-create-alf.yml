@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        unity-tag: [2019.4.20f1]
+        unity-tag: [2019.4.14f1]
     steps:
     - name: Request manual activation file
       id: getManualLicenseFile
