@@ -32,7 +32,7 @@ jobs:
       with:
         cmd: ./gradlew createDebugCoverageReport --stacktrace
         api: 30
-        tag: default
+        tag: google_apis
         abi: x86
     - uses: actions/upload-artifact@master
       with:
