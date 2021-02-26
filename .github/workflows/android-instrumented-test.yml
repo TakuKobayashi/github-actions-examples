@@ -23,8 +23,10 @@ jobs:
         java-version: 1.8
     # Download & install the Android SDK.
     - uses: malinskiy/action-android/install-sdk@release/0.1.1
+      working-directory: ./Android
     - name: Run instrumentation tests
       uses: malinskiy/action-android/emulator-run-cmd@release/0.1.1
+      working-directory: ./Android
       with:
         cmd: ./gradlew createDebugCoverageReport --stacktrace
         api: 30
