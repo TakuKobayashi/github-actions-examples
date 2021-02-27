@@ -52,9 +52,9 @@ jobs:
     - name: start emulator
       working-directory: ./Android
       run: |
-        android-sdk-linux/emulator/emulator -avd test_android_emulator -port 5556 -no-snapshot-save -no-audio -no-boot-anim &
-        android-sdk-linux/platform-tools/adb -s emulator-5556 shell 'while [[ -z $(getprop sys.boot_completed) ]]; do echo "Sleeping for 1s";sleep 1; done;'
-        android-sdk-linux/platform-tools/adb -s emulator-5556 shell input keyevent 82 &
+        android-sdk-linux/emulator/emulator -avd test_android_emulator -no-snapshot-save -no-audio -no-boot-anim &
+        android-sdk-linux/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do echo "Sleeping for 1s";sleep 1; done;'
+        android-sdk-linux/platform-tools/adb shell input keyevent 82 &
     - name: execute test and report coverage
       working-directory: ./Android
       run: |
