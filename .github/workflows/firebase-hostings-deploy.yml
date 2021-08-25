@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: hosting-build
-          path: ./firebase/firebase-hosting-example/build
+          path: ./firebase/firebase-hosting-example/public
   deploy:
     name: Deploy
     needs: build

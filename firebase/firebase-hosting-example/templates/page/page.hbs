@@ -1,0 +1,18 @@
+import React, { FunctionComponent } from 'react';
+import { PageProps{{#if withQuery}}, graphql{{/if}} } from 'gatsby';
+
+{{#if withQuery}}
+interface {{pascalCase name}}PageData {}
+
+{{/if}}
+const {{pascalCase name}}Page: FunctionComponent<PageProps{{#if withQuery}}<{{pascalCase name}}PageData>{{/if}}> = () => {
+  return <main>{{pascalCase name}} Page</main>;
+};
+{{#if withQuery}}
+
+export const query = graphql`
+  query {{pascalCase name}}PageQuery {}
+`;
+{{/if}}
+
+export default {{pascalCase name}}Page;
