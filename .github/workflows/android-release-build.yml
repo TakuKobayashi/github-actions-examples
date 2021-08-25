@@ -63,8 +63,8 @@ jobs:
       with:
         name: outputs
         path: Android/app/build/outputs/
-  deploy:
-    name: Deploy
+  distribution:
+    name: AppDistribution
     needs: build
     runs-on: ubuntu-latest
     steps:
