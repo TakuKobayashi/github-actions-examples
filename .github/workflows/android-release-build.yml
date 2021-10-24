@@ -32,14 +32,14 @@ jobs:
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager "platform-tools" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
         export ANDROID_HOME=$PWD/android-sdk-linux
         export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
         chmod +x ./gradlew
         set +o pipefail
-        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+        yes | android-sdk-linux/cmdline-tools/bin/sdkmanager --licenses
         set -o pipefail
     - name: Setup Build Configs
       working-directory: ./Android
