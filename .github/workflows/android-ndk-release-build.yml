@@ -14,7 +14,6 @@ jobs:
       matrix:
         compile-sdk: [31]
         build-tools: [30.0.3]
-        sdk-tools-url: [https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip]
         ndk-version: [21.0.6113669]
         cmake-version: [3.10.2.4988404]
 
@@ -31,7 +30,7 @@ jobs:
     - name: download Android SDK
       working-directory: ./AndroidNDK
       run: |
-        wget --quiet --output-document=android-sdk.zip ${{ matrix.sdk-tools-url }}
+        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
