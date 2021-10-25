@@ -33,7 +33,8 @@ jobs:
         unzip -d android-sdk-unziped android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
-        sudo mv ./android-sdk-unziped/cmdline-tools ./android-sdk-linux/cmdline-tools/latest
+        sudo mkdir android-sdk-linux/cmdline-tools/latest
+        sudo mv android-sdk-unziped/cmdline-tools android-sdk-linux/cmdline-tools/latest
         echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
         echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "platform-tools" >/dev/null
         echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
