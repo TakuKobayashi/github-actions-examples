@@ -16,13 +16,13 @@ jobs:
         build-tools: [30.0.3]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: setup ubuntu
       run: |
         sudo apt-get --quiet update --yes
         sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
     - name: setup JDK 1.8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 1.8
     - name: download Android SDK
@@ -32,14 +32,15 @@ jobs:
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
-        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
-        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager "platform-tools" >/dev/null
-        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
+        sudo mv android-sdk-linux/cmdline-tools/ android-sdk-linux/tools/
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
         export ANDROID_HOME=$PWD/android-sdk-linux
         export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
         chmod +x ./gradlew
         set +o pipefail
-        yes | android-sdk-linux/cmdline-tools/bin/sdkmanager --licenses
+        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
         set -o pipefail
     - name: Android Debug Build
       working-directory: ./Android
