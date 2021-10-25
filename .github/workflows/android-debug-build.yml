@@ -30,18 +30,18 @@ jobs:
       working-directory: ./Android
       run: |
         wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
-        unzip -d android-sdk-linux android-sdk.zip
+        unzip -d android-sdk-unziped android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
-        sudo mv android-sdk-linux/cmdline-tools/ android-sdk-linux/tools/
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
+        sudo mv android-sdk-unziped/cmdline-tools android-sdk-linux/cmdline-tools/latest
+        echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "platform-tools" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
         export ANDROID_HOME=$PWD/android-sdk-linux
-        export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+        export PATH=$PATH:$PWD/android-sdk-linux/cmdline-tools/latest/platform-tools/
         chmod +x ./gradlew
         set +o pipefail
-        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+        yes | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager --licenses
         set -o pipefail
     - name: Android Debug Build
       working-directory: ./Android
