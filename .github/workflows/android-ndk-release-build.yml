@@ -35,23 +35,22 @@ jobs:
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
-        sudo mv android-sdk-linux/cmdline-tools/ android-sdk-linux/tools/
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
-        echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
-        export ANDROID_HOME=$PWD/android-sdk-linux
-        export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. "platform-tools" >/dev/null
+        echo y | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. "build-tools;${{ matrix.build-tools }}" >/dev/null
+        export ANDROID_SDK_ROOT=$PWD
+        export PATH=$PATH:$PWD/platform-tools/
         chmod +x ./gradlew
         set +o pipefail
-        yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+        yes | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --licenses
         set -o pipefail
     - name: install Android NDK
       working-directory: ./AndroidNDK
-      run: android-sdk-linux/tools/bin/sdkmanager --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
+      run: android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
     - name: Insert NDK path
       working-directory: ./AndroidNDK
       run: |
-        echo "ndk.dir=$PWD/android-sdk-linux/ndk/${{ matrix.ndk-version }}" >> ./local.properties
+        echo "ndk.dir=$PWD/ndk/${{ matrix.ndk-version }}" >> ./local.properties
     - name: Setup Build Configs
       working-directory: ./AndroidNDK
       env:
@@ -69,7 +68,7 @@ jobs:
     - name: Android Release aab Build
       working-directory: ./AndroidNDK
       run: ./gradlew bundleRelease
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: outputs
         path: AndroidNDK/app/build/outputs/
