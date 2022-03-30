@@ -50,7 +50,10 @@ jobs:
     - name: Insert NDK path
       working-directory: ./AndroidNDK
       run: |
-        echo "ndk.dir=$PWD/android-sdk-linux/ndk/${{ matrix.ndk-version }}" >> ./local.properties
+        ls -a android-sdk-linux/cmdline-tools/
+        ls -a android-sdk-linux/
+        ls -a android-sdk-linux/cmdline-tools/bin/
+        echo "ndk.dir=$PWD/android-sdk-linux/cmdline-tools/ndk/${{ matrix.ndk-version }}" >> ./local.properties
     - name: Android Debug Build
       working-directory: ./AndroidNDK
       run: ./gradlew assembleDebug
