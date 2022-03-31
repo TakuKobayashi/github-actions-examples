@@ -31,7 +31,7 @@ jobs:
     - name: download Android SDK
       working-directory: ./AndroidNDK
       run: |
-        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-8092744_latest.zip
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
