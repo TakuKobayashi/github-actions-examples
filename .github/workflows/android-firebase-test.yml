@@ -24,7 +24,7 @@ jobs:
     - name: download gcloud sdk
       working-directory: ./Android
       run: |
-        curl --output google-cloud-sdk.tar.gz -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-380.0.0.0-linux-x86_64.tar.gz
+        curl --output google-cloud-sdk.tar.gz -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-380.0.0-linux-x86_64.tar.gz
         tar xvzf google-cloud-sdk.tar.gz
     - name: download gcloud sdk
       working-directory: ./Android
