@@ -29,13 +29,11 @@ jobs:
     - name: download gcloud sdk
       working-directory: ./Android
       run: |
-        ls -a
         ./google-cloud-sdk/install.sh
-        ./google-cloud-sdk/bin/gcloud init
     - name: gcloud components update
       working-directory: ./Android
       run: |
-         gcloud components update
+        ./google-cloud-sdk/bin/gcloud init
     - name: gcloud auth login
       working-directory: ./Android
       run: |
