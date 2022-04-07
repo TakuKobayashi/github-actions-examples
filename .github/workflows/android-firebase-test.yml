@@ -29,8 +29,6 @@ jobs:
         credentials_json: '${{ secrets.FIREBASE_CREDENTIALS_JSON }}'
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
-    - name: 'Use gcloud CLI'
-      run: 'gcloud info'
     - name: setup JDK 1.8
       uses: actions/setup-java@v2
       with:
