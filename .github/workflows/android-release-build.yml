@@ -63,3 +63,34 @@ jobs:
       with:
         name: outputs
         path: Android/app/build/outputs/
+  distribution:
+    name: AppDistribution
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: outputs
+          path: Android/outputs
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          file: Android/outputs/apk/release/app-release.apk
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install firebase-tools
+        working-directory: ./Android
+        run: npm install -g firebase-tools
+      - name: upload artifact to Firebase App Distribution manual
+        working-directory: ./Android
+        run: firebase appdistribution:distribute outputs/apk/release/app-release.apk --app ${{secrets.FIREBASE_APP_ID}} --token ${{secrets.FIREBASE_TOKEN}}
