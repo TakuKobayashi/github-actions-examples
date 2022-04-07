@@ -14,6 +14,9 @@ jobs:
       matrix:
         compile-sdk: [31]
         build-tools: [30.0.3]
+        test-device-model-name: ["redfin"]
+        test-device-version: [30]
+        test-locale: ["ja_JP"]
 
     steps:
     - uses: actions/checkout@v2
@@ -63,3 +66,6 @@ jobs:
     - name: Android Release Apk Build
       working-directory: ./Android
       run: ./gradlew assembleRelease
+    - name: Execute Firebase Test
+      working-directory: ./Android
+      run:  gcloud firebase test android run --type robo --app app/build/outputs/apk/release/app-release.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
