@@ -66,9 +66,9 @@ jobs:
     - name: Android Release Apk Build
       working-directory: ./Android
       run: ./gradlew assembleRelease
+    - name: checkfile
+      run: ls -a
     - name: Set execute project id
-      working-directory: ./Android
       run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
     - name: Execute firebase test
-      working-directory: ./Android
-      run:  gcloud firebase test android run --type robo --app app/build/outputs/apk/release/app-release.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
+      run:  gcloud firebase test android run --type robo --app Android/app/build/outputs/apk/release/app-release.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
