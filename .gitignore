@@ -347,3 +347,7 @@ Library_Android
 Logs/*.log
 
 *.cache
+
+google-services.json
+
+.esbuild/
