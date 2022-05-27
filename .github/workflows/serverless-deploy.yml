@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x]
+        node-version: [14.x]
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     - name: setup ubuntu
       run: sudo apt-get --quiet update --yes
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     - name: yarn install
@@ -33,7 +33,7 @@ jobs:
       run: |
         yarn run serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
         yarn run serverless deploy --package ./build
-    - uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@v3
       with:
         name: build
         path: serverless/build

@@ -276,4 +276,6 @@ firebase-debug.log*
 webapi.js
 .cxx
 
+.esbuild/
+
 google-services.json

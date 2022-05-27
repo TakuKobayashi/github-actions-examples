@@ -1,5 +1,4 @@
 import { APIGatewayProxyHandler, APIGatewayEvent, Context } from 'aws-lambda';
-import 'source-map-support/register';
 
 // When serverless offline start, access below
 // http://localhost:3000/dev/hello
@@ -14,19 +13,16 @@ export const hello: APIGatewayProxyHandler = async (event: APIGatewayEvent, _con
   };
 }
 
-import * as awsServerlessExpress from 'aws-serverless-express';
-import * as express from 'express';
+import serverlessExpress from '@vendia/serverless-express';
+import express from 'express';
 
 const app = express();
-const server = awsServerlessExpress.createServer(app);
 
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
   res.json({ hello: 'world' });
 });
 
 // When serverless offline start, access below
 // http://localhost:3000/dev/
 // add generate new AWS Lambda functions[api]
-export const api: APIGatewayProxyHandler = (event: APIGatewayEvent, context: Context) => {
-  awsServerlessExpress.proxy(server, event, context);
-};
+export const api = serverlessExpress({ app });
