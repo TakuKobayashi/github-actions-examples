@@ -24,11 +24,14 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-          projectPath: ./Unity
+          projectPath: Unity/
 
+      - name: check
+        working-directory: Unity/
+        run: ls -a
       # Upload Build
       - name: Upload Build
         uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: Unity/build/${{ matrix.targetPlatform }}
+          path: Unity/build/
