@@ -6,15 +6,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        unity-tag: [2019.4.14f1]
+        unity-tag: [2020.3.26f1]
     steps:
     - name: Request manual activation file
       id: getManualLicenseFile
-      uses: game-ci/unity-request-activation-file@v1.2
+      uses: game-ci/unity-request-activation-file@v2
       with:
         unityVersion: ${{ matrix.unity-tag }}
+    - name: check
+      run: ls -a
     - name: Expose as artifact
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.getManualLicenseFile.outputs.filePath }}
         path: ${{ steps.getManualLicenseFile.outputs.filePath }}
