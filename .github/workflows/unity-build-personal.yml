@@ -17,6 +17,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Unity/Library
+          key: ${{ runner.os }}-Unity-Library
+
       # Build
       - name: Build
         uses: game-ci/unity-builder@v2
