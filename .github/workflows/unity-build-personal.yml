@@ -29,6 +29,10 @@ jobs:
       - name: check
         working-directory: Unity/
         run: ls -a
+
+      - name: check2
+        run: ls -a
+
       # Upload Build
       - name: Upload Build
         uses: actions/upload-artifact@v3
