@@ -31,11 +31,11 @@ jobs:
         run: ls -a
 
       - name: check2
-        run: ls -a
+        run: ls -a build/
 
       # Upload Build
       - name: Upload Build
         uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: Unity/build/
+          path: build/
