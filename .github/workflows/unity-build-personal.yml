@@ -8,13 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          - StandaloneWindows # Build a Windows standalone.
-          - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          - StandaloneLinux64 # Build a Linux 64-bit standalone.
-          - iOS # Build an iOS player.
           - Android # Build an Android .apk standalone app.
-          - WebGL # WebGL.
 
     steps:
       # Checkout
@@ -25,6 +19,7 @@ jobs:
 
       # Build
       - name: Build
+        working-directory: ./Unity
         uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -33,6 +28,7 @@ jobs:
 
       # Upload Build
       - name: Upload Build
+        working-directory: ./Unity
         uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
