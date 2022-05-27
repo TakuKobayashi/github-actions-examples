@@ -19,17 +19,16 @@ jobs:
 
       # Build
       - name: Build
-        working-directory: ./Unity
         uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          projectPath: ./Unity
 
       # Upload Build
       - name: Upload Build
-        working-directory: ./Unity
         uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          path: Unity/build/${{ matrix.targetPlatform }}
