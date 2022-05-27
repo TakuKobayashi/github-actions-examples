@@ -32,7 +32,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         yarn run serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
-        yarn run serverless deploy --package ./build
+        yarn run serverless deploy --stage production --package ./build
     - uses: actions/upload-artifact@v3
       with:
         name: build
