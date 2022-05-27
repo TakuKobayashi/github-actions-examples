@@ -1,33 +1,39 @@
-name: Acquire activation file
+name: execute-unity-builds
 on: [push]
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 jobs:
   build:
-    name: Build my project ✨
+    name: ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        unity-tag: [2019.4.14f1]
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          - iOS # Build an iOS player.
+          - Android # Build an Android .apk standalone app.
+          - WebGL # WebGL.
+
     steps:
       # Checkout
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
         with:
-          lfs: true
-      # Cache
-      - uses: actions/cache@v1.1.0
-        with:
-          path: Library
-          key: Library
+          fetch-depth: 0
+
       # Build
-      - name: Build project
-        uses: game-ci/unity-builder@v1.5
+      - name: Build
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          unityVersion: ${{ matrix.unity-tag }}
-          targetPlatform: WebGL
-      # Output
-      - uses: actions/upload-artifact@v1
+          targetPlatform: ${{ matrix.targetPlatform }}
+
+      # Upload Build
+      - name: Upload Build
+        uses: actions/upload-artifact@v3
         with:
-          name: Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
