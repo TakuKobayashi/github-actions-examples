@@ -7,7 +7,12 @@ jobs:
     strategy:
       matrix:
         unity-tag: [2020.3.26f1]
+        node-version: [14.x]
     steps:
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
     - name: Request manual activation file
       id: getManualLicenseFile
       uses: game-ci/unity-request-activation-file@v2
@@ -15,8 +20,19 @@ jobs:
         unityVersion: ${{ matrix.unity-tag }}
     - name: check
       run: ls -a
+    - name: Install node package, `unity-license-activate`
+      run: npm install --global unity-license-activate
+    - name: Activate the license
+      run: unity-license-activate "${{ secrets.UNITY_EMAIL }}" "${{ secrets.UNITY_PASSWORD }}" "${{ steps.getManualLicenseFile.outputs.filePath }}"
+    - name: check2
+      run: ls -a
+    - name: Read ulf
+      id: ulfRead
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ${{ env.ULF_FILE }}
     - name: Expose as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ steps.getManualLicenseFile.outputs.filePath }}
-        path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+        name: output.ulf
+        path: ${{ steps.ulfRead.outputs.content  }}

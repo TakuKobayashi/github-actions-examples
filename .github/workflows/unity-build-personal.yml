@@ -34,6 +34,8 @@ jobs:
 
       - name: check2
         run: ls -a build/
+      - name: check3
+        run: ls -a build/${{ matrix.targetPlatform }}
 
       # Upload Build
       - name: Upload Build
