@@ -1,0 +1,117 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    cocoapods
+  end
+
+  desc "Distribution of AppStore build"
+  lane :store_build do |options|
+    p "------------------------------------"
+    p options
+    setup_build_common(options)
+    configuration = 'Release'
+    if options[:configuration]
+      configuration = options[:configuration]
+    end
+    scheme_name = options[:scheme] || "github-actions-examples"
+    build_app({
+      configuration: configuration,
+      scheme: scheme_name,
+      export_method: "app-store",
+      output_name: "#{scheme_name}-store-#{configuration}.ipa",
+      include_bitcode: true,
+      clean: true,
+      workspace: "github-actions-examples.xcworkspace",
+    })
+  end
+
+  desc "Distribution of AdHoc build"
+  lane :adhoc_build do |options|
+    p "------------------------------------"
+    p options
+    setup_build_common(options)
+    configuration = 'Debug'
+    if options[:configuration]
+      configuration = options[:configuration]
+    end
+    scheme_name = options[:scheme] || "github-actions-examples"
+    build_app({
+      configuration: configuration,
+      scheme: scheme_name,
+      export_method: 'ad-hoc',
+      export_xcargs: '-allowProvisioningUpdates',
+      output_name: "#{scheme_name}-adhoc-#{configuration}.ipa",
+      include_bitcode: true,
+      clean: true,
+      workspace: "github-actions-examples.xcworkspace",
+    })
+  end
+
+  private_lane :setup_build_common do |options|
+    select_xcode(options)
+    if options[:team_id]
+      update_team(options)
+    end
+    import_certificates_and_provisioning_profile(options)
+  end
+
+  private_lane :update_team do |options|
+    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
+    team_id = options[:team_id]
+    update_project_team(
+      path: xcodeproject_path,
+      teamid: team_id
+    )
+  end
+
+  desc "select common xcode version"
+  private_lane :select_xcode do |options|
+    use_xcode_version = options[:xcode_version] || "11.5"
+    xcversion(version: use_xcode_version)
+  end
+
+  desc "Import Certificates and Provisioning Profile"
+  private_lane :import_certificates_and_provisioning_profile do |options|
+    xcodeproject_path = options[:xcodeproject_path] || "github-actions-examples.xcodeproj"
+    scheme_name = options[:scheme] || "github-actions-examples"
+    keychain_password = ENV.fetch("KEYCHAIN_PASSWORD") { "" }
+    cert_password = ENV.fetch("CERT_PASSWORD") { "" }
+    certificate_path = options[:certificate_path] || "ios_distribution.p12"
+    provisioning_profile = options[:provisioning_profile] || "githubactionsexamples.mobileprovision"
+    keychain_name = options[:keychain_name] || "github-actions-examples-chain"
+    if options[:create_new_keychain]
+      create_keychain(
+        name: keychain_name,
+        password: keychain_password,
+      )
+    end
+    import_certificate(
+      certificate_path: certificate_path,
+      certificate_password: cert_password,
+      keychain_name: keychain_name,
+      keychain_password: keychain_password,
+    )
+    update_project_provisioning(
+      xcodeproj: xcodeproject_path,
+      profile: provisioning_profile, # optional if you use sigh
+      build_configuration: "Release",
+      certificate: "ios_distribution.cer" # optionally specify the codesigning identity
+    )
+  end
+end
