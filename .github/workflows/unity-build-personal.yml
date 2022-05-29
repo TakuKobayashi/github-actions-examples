@@ -7,10 +7,34 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        unity-tag: [2020.3.26f1]
+        node-version: [14.x]
         targetPlatform:
           - Android # Build an Android .apk standalone app.
-
     steps:
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Request manual activation file
+        id: getManualLicenseFile
+        uses: game-ci/unity-request-activation-file@v2
+        with:
+          unityVersion: ${{ matrix.unity-tag }}
+      - name: check
+        run: ls -a
+      - name: Install node package, `unity-activate`
+        run: npm install -g unity-activate
+      - name: activateTheLicense
+        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" "${{ steps.getManualLicenseFile.outputs.filePath }}"
+      - name: check2
+        run: ls -a
+      - name: Read ulf
+        id: ulfRead
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./Unity_v2020.x.ulf
+
       # Checkout
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,7 +51,7 @@ jobs:
       - name: Build
         uses: game-ci/unity-builder@v2
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_LICENSE: ${{ steps.ulfRead.outputs.content }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           projectPath: Unity/
