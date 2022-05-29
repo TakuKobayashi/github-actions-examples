@@ -26,11 +26,6 @@ jobs:
       run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" "${{ steps.getManualLicenseFile.outputs.filePath }}"
     - name: check2
       run: ls -a
-    - name: Read ulf
-      id: ulfRead
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ${{ env.ULF_FILE }}
     - name: Expose as artifact
       uses: actions/upload-artifact@v3
       with:
