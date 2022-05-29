@@ -20,10 +20,10 @@ jobs:
         unityVersion: ${{ matrix.unity-tag }}
     - name: check
       run: ls -a
-    - name: Install node package, `unity-license-activate`
+    - name: Install node package, `unity-activate`
       run: npm install -g unity-activate
     - name: activateTheLicense
-      run: unity-license-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" "${{ steps.getManualLicenseFile.outputs.filePath }}"
+      run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" "${{ steps.getManualLicenseFile.outputs.filePath }}"
     - name: check2
       run: ls -a
     - name: Read ulf
