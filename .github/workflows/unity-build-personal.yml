@@ -1,5 +1,8 @@
 name: execute-unity-builds
-on: [push]
+on:
+  push:
+    branches:
+    - unity-deploy
 jobs:
   build:
     name: ${{ matrix.targetPlatform }}
