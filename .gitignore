@@ -351,3 +351,6 @@ Logs/*.log
 google-services.json
 
 .esbuild/
+
+*.alf
+*.ulf
