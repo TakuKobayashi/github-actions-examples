@@ -32,28 +32,44 @@ jobs:
 
       # Cache
       - uses: actions/cache@v3
+        id: cache-unity-library
         with:
-          key: Unity-Library-${{ runner.os }}-${{ matrix.targetPlatform }}
+          key: ${{ runner.os }}-Unity-Library-${{ matrix.targetPlatform }}
           path: |
             Unity/Library
-            Unity/Unity_v${{ matrix.unity-license-version }}.ulf
           restore-keys: |
-            Unity-Library-
+            ${{ runner.os }}-Unity-Library-
+
+      # Cache
+      - uses: actions/cache@v3
+        id: cache-unity-license
+        with:
+          key: ${{ runner.os }}-Unity-License-${{ matrix.unity-license-version }}
+          path: |
+            Unity/Unity_v${{ matrix.unity-license-version }}.ulf
+            Unity/Unity_v${{ matrix.unity-editor-version }}.alf
 
       # Request Unity Activation File
-      - name: Request manual activation file
+      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
+        name: Request manual activation file
         id: getManualLicenseFile
         uses: game-ci/unity-request-activation-file@v2
         with:
           unityVersion: ${{ matrix.unity-editor-version }}
+      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
+        name: copy alf file for cache.
+        run: cp ${{ steps.getManualLicenseFile.outputs.filePath }} Unity/
 
       # Activate from alf File
-      - name: Install node package, `unity-activate`
+      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
+        name: Install node package, `unity-activate`
         run: npm install -g unity-activate
-      - name: Activate The License
+      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
+        name: Activate The License
         id: activateLicense
         run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o Unity/ "${{ steps.getManualLicenseFile.outputs.filePath }}"
-      - name: Read ulf
+      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
+        name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
