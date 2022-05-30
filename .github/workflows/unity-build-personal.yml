@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        unity-tag: [2020.3.26f1]
+        unity-tag: [2020.x]
         node-version: [14.x]
         targetPlatform:
           - Android # Build an Android .apk standalone app.
@@ -30,8 +30,7 @@ jobs:
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
-          path: ${{ steps.activateLicense.outputs.filePath }}
-
+          path: ./Unity_v2020.x.ulf
       # Checkout
       - name: Checkout
         uses: actions/checkout@v2
