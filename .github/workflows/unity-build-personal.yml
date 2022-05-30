@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        unity-tag: [2020.x]
+        unity-tag: [2020.3]
         node-version: [14.x]
         targetPlatform:
           - Android # Build an Android .apk standalone app.
