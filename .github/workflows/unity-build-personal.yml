@@ -11,10 +11,10 @@ jobs:
         unity-license-version: [2020.x]
         node-version: [14.x]
         targetPlatform:
-          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          - StandaloneWindows # Build a Windows standalone.
-          - StandaloneWindows64 # Build a Windows 64-bit standalone.
-          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          # - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          # - StandaloneWindows # Build a Windows standalone.
+          # - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          # - StandaloneLinux64 # Build a Linux 64-bit standalone.
           - iOS # Build an iOS player.
           - Android # Build an Android .apk standalone app.
           - WebGL # WebGL.
@@ -23,6 +23,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Unity/Library
+          key: ${{ runner.os }}-Unity-Library
 
       # Request Unity Activation File
       - name: Request manual activation file
@@ -36,24 +48,12 @@ jobs:
         run: npm install -g unity-activate
       - name: Activate The License
         id: activateLicense
-        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" "${{ steps.getManualLicenseFile.outputs.filePath }}"
+        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o Unity/ "${{ steps.getManualLicenseFile.outputs.filePath }}"
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
-          path: Unity_v${{ matrix.unity-license-version }}.ulf
-
-      # Checkout
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      # Cache
-      - uses: actions/cache@v3
-        with:
-          path: Unity/Library
-          key: ${{ runner.os }}-Unity-Library
+          path: Unity/Unity_v${{ matrix.unity-license-version }}.ulf
 
       # Build
       - name: Build
