@@ -33,8 +33,10 @@ jobs:
       # Cache
       - uses: actions/cache@v3
         with:
-          path: Unity/Library
           key: ${{ runner.os }}-Unity-Library
+          path: |
+            Unity/Library/
+            Unity/Unity_v${{ matrix.unity-license-version }}.ulf
 
       # Request Unity Activation File
       - name: Request manual activation file
