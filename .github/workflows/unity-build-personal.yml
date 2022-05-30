@@ -41,7 +41,7 @@ jobs:
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
-          path: Unity_v${{ unity-license-version }}.ulf
+          path: Unity_v${{ matrix.unity-license-version }}.ulf
 
       # Checkout
       - name: Checkout
