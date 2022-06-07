@@ -26,7 +26,7 @@ jobs:
         sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
     - uses: 'google-github-actions/auth@v0'
       with:
-        credentials_json: '${{ secrets.FIREBASE_CREDENTIALS_JSON }}'
+        credentials_json: '${{ secrets.GOOGLE_SERVICES_JSON }}'
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
     - name: 'gcloud update compoments'
