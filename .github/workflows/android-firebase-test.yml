@@ -63,6 +63,12 @@ jobs:
         echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
         echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
         echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
+    - name: setup google-services.json
+      working-directory: ./Android
+      env:
+        GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      run: |
+        echo "${GOOGLE_SERVICES_JSON}" >> ./app/google-services.json
     - name: Android Release Apk Build
       working-directory: ./Android
       run: ./gradlew assembleRelease
