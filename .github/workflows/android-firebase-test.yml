@@ -19,14 +19,14 @@ jobs:
         test-locale: ["ja_JP"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: setup ubuntu
       run: |
         sudo apt-get --quiet update --yes
         sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
     - uses: 'google-github-actions/auth@v0'
       with:
-        credentials_json: '${{ secrets.GOOGLE_SERVICES_JSON }}'
+        credentials_json: '${{ secrets.FIREBASE_CREDENTIALS_JSON }}'
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
     - name: 'gcloud update compoments'
