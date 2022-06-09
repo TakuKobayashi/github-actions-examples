@@ -72,8 +72,6 @@ jobs:
     - name: Android Release Apk Build
       working-directory: ./Android
       run: ./gradlew assembleRelease
-    - name: checkfile
-      run: ls -a
     - name: Set execute project id
       run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
     - name: Execute firebase test
