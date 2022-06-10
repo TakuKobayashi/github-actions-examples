@@ -1,9 +1,9 @@
-name: Android Release Build And Test Run
+name: Android Debug Build And Firebase Test Lab Run
 
 on:
   push:
     branches:
-    - android-test
+    - android-build
 
 jobs:
   build:
