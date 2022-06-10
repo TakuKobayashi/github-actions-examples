@@ -29,7 +29,7 @@ jobs:
         credentials_json: '${{ secrets.FIREBASE_CREDENTIALS_JSON }}'
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v0'
-    - name: 'gcloud update compoments'
+    - name: gcloud update latest compoments
       run: gcloud components update
     - name: setup JDK 1.8
       uses: actions/setup-java@v2
@@ -52,27 +52,23 @@ jobs:
         set +o pipefail
         yes | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --licenses
         set -o pipefail
-    - name: Setup Build Configs
-      working-directory: ./Android
-      env:
-        ANDROID_REALSE_BASE64_KEY: ${{ secrets.ANDROID_REALSE_BASE64_KEY }}
-        ANDROID_REALSE_KEY_PASSWORD: ${{ secrets.ANDROID_REALSE_KEY_PASSWORD }}
-      run: |
-        echo ${ANDROID_REALSE_BASE64_KEY} | base64 -d > ./release-application-key
-        echo "RELEASE_STORE_FILE=`pwd`/release-application-key" >> ./local.properties
-        echo "RELEASE_STORE_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
-        echo "RELEASE_KEY_ALIAS=key0" >> ./local.properties
-        echo "RELEASE_KEY_PASSWORD=${ANDROID_REALSE_KEY_PASSWORD}" >> ./local.properties
     - name: setup google-services.json
       working-directory: ./Android
       env:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: |
         echo "${GOOGLE_SERVICES_JSON}" >> ./app/google-services.json
-    - name: Android Release Apk Build
+    - name: Android Debug Apk Build
       working-directory: ./Android
-      run: ./gradlew assembleRelease
+      run: ./gradlew assembleDebug
+    - name: Android Debug Test Apk Build
+      working-directory: ./Android
+      run: ./gradlew assembleDebugAndroidTest
     - name: Set execute project id
       run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-    - name: Execute firebase test
-      run: gcloud firebase test android run --app Android/app/build/outputs/apk/release/app-release.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
+    - name: Execute firebase robo test
+      working-directory: ./Android
+      run: gcloud firebase test android run --type robo --app app/build/outputs/apk/debug/app-debug.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
+    - name: Execute firebase instrumentation test
+      working-directory: ./Android
+      run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
