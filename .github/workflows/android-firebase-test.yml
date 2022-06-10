@@ -63,7 +63,7 @@ jobs:
       run: ./gradlew assembleDebug
     - name: Android Debug Test Apk Build
       working-directory: ./Android
-      run: ./gradlew assembleDebugAndroidTest
+      run: ./gradlew assembleAndroidTest -DtestBuildType=debug
     - name: Set execute project id
       run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
     - name: Execute firebase robo test
