@@ -1,4 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
+import {
+  loadActionsCacheList,
+  loadArtifactList,
+  loadSecretList,
+  loadWorkflowList,
+  loadListWorkflowRunList,
+  createWorkflowDispatch,
+  reRunWorkflow,
+} from '../commons/octokit';
 
 const express = require('express');
 const githubRouter = express.Router();
@@ -6,6 +15,45 @@ const githubRouter = express.Router();
 githubRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   res.json({ message: 'hello github' });
 });
+
+githubRouter.get('/workflows', async (req: Request, res: Response, next: NextFunction) => {
+  const workflows = await loadWorkflowList();
+  res.json(workflows.data);
+});
+
+githubRouter.get('/workflow_caches', async (req: Request, res: Response, next: NextFunction) => {
+  const actionsCaches = await loadActionsCacheList();
+  res.json(actionsCaches.data);
+});
+
+githubRouter.get('/workflow_runs', async (req: Request, res: Response, next: NextFunction) => {
+  const workflowRuns = await loadListWorkflowRunList();
+  res.json(workflowRuns.data);
+});
+
+githubRouter.get('/artifacts', async (req: Request, res: Response, next: NextFunction) => {
+  const artifacts = await loadArtifactList();
+  res.json(artifacts.data);
+});
+
+githubRouter.get('/secrets', async (req: Request, res: Response, next: NextFunction) => {
+  const secrets = await loadSecretList();
+  res.json(secrets.data);
+});
+
+githubRouter.get('/execute_rerun', async (req: Request, res: Response, next: NextFunction) => {
+  const run_id = parseInt(req.query.run_id.toString());
+  const rerun = await reRunWorkflow(run_id);
+  res.json(rerun.data);
+});
+
+githubRouter.get('/execute_dispatch_workflow', async (req: Request, res: Response, next: NextFunction) => {
+  const workflow_id = parseInt(req.query.workflow_id.toString());
+  const runDispatchWorkflow = await createWorkflowDispatch(workflow_id, req.query.target_branch.toString());
+  res.json(runDispatchWorkflow.data);
+});
+
+//return res.status(200).send(<Bufferデータ>)
 
 githubRouter.post('/webhook', async (req: Request, res: Response, next: NextFunction) => {
   /*
