@@ -13,6 +13,7 @@ jobs:
         unity-editor-version: [2020.3.26f1]
         unity-license-version: [2020.x]
         node-version: [14.x]
+        root-project-path: [Unity]
         targetPlatform:
           # - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           # - StandaloneWindows # Build a Windows standalone.
@@ -39,7 +40,7 @@ jobs:
         with:
           key: ${{ runner.os }}-Unity-Library-${{ matrix.targetPlatform }}
           path: |
-            Unity/Library
+            ${{ matrix.root-project-path }}/Library
           restore-keys: |
             ${{ runner.os }}-Unity-Library-
 
@@ -49,8 +50,8 @@ jobs:
         with:
           key: ${{ runner.os }}-Unity-License-${{ matrix.unity-license-version }}
           path: |
-            Unity/Unity_v${{ matrix.unity-license-version }}.ulf
-            Unity/Unity_v${{ matrix.unity-editor-version }}.alf
+            ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+            ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
       # Request Unity Activation File
       - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
@@ -73,7 +74,7 @@ jobs:
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
-          path: Unity/Unity_v${{ matrix.unity-license-version }}.ulf
+          path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
 
       # Build
       - name: Build
@@ -82,7 +83,7 @@ jobs:
           UNITY_LICENSE: ${{ steps.ulfRead.outputs.content }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-          projectPath: Unity/
+          projectPath: ${{ matrix.root-project-path }}
           allowDirtyBuild: true
 
       # Upload Build
