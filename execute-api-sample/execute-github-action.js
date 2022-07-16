@@ -372,3 +372,12 @@ const workflowRunsListResponse = await octokit.rest.actions.listWorkflowRunsForR
 }
 */
 console.log(workflowRunsListResponse.data);
+
+// 既に存在するGithub ActionsのWorkflowを再度実行するようにする
+// アプリの配信などのために使用。直前に実行したものが失敗していなかったら実行するのが良さそう。
+const rerunResponse = await octokit.rest.actions.reRunWorkflow({
+  owner,
+  repo,
+  run_id: 2681210114,
+});
+console.log(rerunResponse.data);
