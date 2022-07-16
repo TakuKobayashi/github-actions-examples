@@ -386,6 +386,7 @@ console.log(rerunResponse.data);
 
 // ymlファイルに on: workflow_dispatch: と記述されているものを新たに実行する
 // on: workflow_dispatchは手動でWorkflowを実行できるよ、という宣言が書かれているということ
+// ref は実行するブランチ名
 // https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
 const createWorkflowDispatchResponse = await octokit.rest.actions.createWorkflowDispatch({
   owner,
@@ -393,4 +394,4 @@ const createWorkflowDispatchResponse = await octokit.rest.actions.createWorkflow
   workflow_id: 264861,
   ref: "firebase-deploy",
 });
-console.log(createWorkflowDispatchResponse.data);
+console.log(createWorkflowDispatchResponse);
