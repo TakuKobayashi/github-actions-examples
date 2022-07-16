@@ -375,20 +375,22 @@ console.log(workflowRunsListResponse.data);
 
 // 既に存在するGithub ActionsのWorkflowを再度実行するようにする
 // アプリの配信などのために使用。直前に実行したものが失敗していなかったら実行するのが良さそう。
+/*
 const rerunResponse = await octokit.rest.actions.reRunWorkflow({
   owner,
   repo,
   run_id: 2681210114,
 });
 console.log(rerunResponse.data);
+*/
 
-// ymlファイルに on: workflow_dispatch と記述されているものを新たに実行する
+// ymlファイルに on: workflow_dispatch: と記述されているものを新たに実行する
 // on: workflow_dispatchは手動でWorkflowを実行できるよ、という宣言が書かれているということ
 // https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch
 const createWorkflowDispatchResponse = await octokit.rest.actions.createWorkflowDispatch({
   owner,
   repo,
   workflow_id: 264861,
-  ref: "android-build",
+  ref: "firebase-deploy",
 });
 console.log(createWorkflowDispatchResponse.data);
