@@ -40,6 +40,9 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        root-project-path: [./firebase]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
