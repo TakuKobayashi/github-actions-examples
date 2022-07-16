@@ -3,5 +3,8 @@ import { config } from 'dotenv';
 const configedEnv = config();
 
 const octokit = new Octokit({ auth: configedEnv.parsed.GITHUB_PERSONAL_ACCESS_TOKEN });
-const authenticated = await octokit.rest.users.getAuthenticated();
-console.log(authenticated.data);
+const response = await octokit.rest.actions.getActionsCacheList({
+  owner: "TakuKobayashi",
+  repo: "github-actions-examples",
+});
+console.log(response.data);
