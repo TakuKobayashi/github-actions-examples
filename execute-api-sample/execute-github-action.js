@@ -61,3 +61,14 @@ const artifactListResponse = await octokit.rest.actions.listArtifactsForRepo({
 }
 */
 console.log(artifactListResponse.data);
+/*
+Artifactをダウンロードするときは以下のような感じ
+import fs from "fs"
+const downloadArtifactResponse = await octokit.rest.actions.downloadArtifact({
+  owner,
+  repo,
+  artifact_id: 300388539,
+  archive_format: "zip"
+})
+fs.appendFileSync("output.zip", Buffer.from(downloadArtifactResponse.data))
+*/
