@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - firebase-deploy
+  workflow_dispatch:
 
 jobs:
   build:
