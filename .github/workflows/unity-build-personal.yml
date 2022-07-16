@@ -54,23 +54,19 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
       # Request Unity Activation File
-      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
-        name: Request manual activation file
+      - name: Request manual activation file
         id: getManualLicenseFile
         uses: game-ci/unity-request-activation-file@v2
         with:
           unityVersion: ${{ matrix.unity-editor-version }}
 
       # Activate from alf File
-      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
-        name: Install node package, `unity-activate`
+      - name: Install node package, `unity-activate`
         run: npm install -g unity-activate
-      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
-        name: Activate The License
+      - name: Activate The License
         id: activateLicense
         run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o Unity/ "${{ steps.getManualLicenseFile.outputs.filePath }}"
-      - if: ${{ steps.cache-unity-license.outputs.cache-hit == false }}
-        name: Read ulf
+      - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
