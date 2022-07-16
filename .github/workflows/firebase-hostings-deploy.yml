@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        root-project-path: [./firebase]
 
     steps:
       - uses: actions/checkout@v2
@@ -23,18 +24,18 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: yarn install
-        working-directory: ./firebase/firebase-hosting-example
+        working-directory: ${{ matrix.root-project-path }}/firebase-hosting-example
         run: |
           yarn install
       - name: yarn build
-        working-directory: ./firebase/firebase-hosting-example
+        working-directory: ${{ matrix.root-project-path }}/firebase-hosting-example
         run: |
           yarn run build
       - name: Archive Production Artifact
         uses: actions/upload-artifact@v2
         with:
           name: hosting-build
-          path: ./firebase/firebase-hosting-example/public
+          path: ${{ matrix.root-project-path }}/firebase-hosting-example/public
   deploy:
     name: Deploy
     needs: build
@@ -46,11 +47,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: hosting-build
-          path: ./firebase/public
+          path: ${{ matrix.root-project-path }}/public
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_PATH: ./firebase
+          PROJECT_PATH: ${{ matrix.root-project-path }}
