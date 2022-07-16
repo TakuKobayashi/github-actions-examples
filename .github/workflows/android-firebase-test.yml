@@ -14,6 +14,7 @@ jobs:
       matrix:
         compile-sdk: [31]
         build-tools: [30.0.3]
+        root-project-path: [./Android]
         test-device-model-name: ["Pixel3"]
         test-device-version: [30]
         test-locale: ["ja_JP"]
@@ -37,7 +38,7 @@ jobs:
         distribution: 'zulu'
         java-version: '11'
     - name: download Android SDK
-      working-directory: ./Android
+      working-directory: ${{ matrix.root-project-path }}
       run: |
         wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-8092744_latest.zip
         unzip -d android-sdk-linux android-sdk.zip
@@ -53,22 +54,22 @@ jobs:
         yes | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --licenses
         set -o pipefail
     - name: setup google-services.json
-      working-directory: ./Android
+      working-directory: ${{ matrix.root-project-path }}
       env:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: |
         echo "${GOOGLE_SERVICES_JSON}" >> ./app/google-services.json
     - name: Android Debug Apk Build
-      working-directory: ./Android
+      working-directory: ${{ matrix.root-project-path }}
       run: ./gradlew assembleDebug
     - name: Android Debug Test Apk Build
-      working-directory: ./Android
+      working-directory: ${{ matrix.root-project-path }}
       run: ./gradlew assembleAndroidTest -DtestBuildType=debug
     - name: Set execute project id
       run: gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
     - name: Execute firebase robo test
-      working-directory: ./Android
+      working-directory: ${{ matrix.root-project-path }}
       run: gcloud firebase test android run --type robo --app app/build/outputs/apk/debug/app-debug.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"
     - name: Execute firebase instrumentation test
-      working-directory: ./Android
+      working-directory: ${{ matrix.root-project-path }}
       run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device "model=${{ matrix.test-device-model-name }},version=${{ matrix.test-device-version }},locale=${{ matrix.test-locale }}"

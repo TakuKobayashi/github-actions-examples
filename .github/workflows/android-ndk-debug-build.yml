@@ -16,6 +16,7 @@ jobs:
         build-tools: [30.0.3]
         ndk-version: [21.0.6113669]
         cmake-version: [3.10.2.4988404]
+        root-project-path: [./AndroidNDK]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,7 +30,7 @@ jobs:
         distribution: 'zulu'
         java-version: '11'
     - name: download Android SDK
-      working-directory: ./AndroidNDK
+      working-directory: ${{ matrix.root-project-path }}
       run: |
         wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-8092744_latest.zip
         unzip -d android-sdk-linux android-sdk.zip
@@ -45,16 +46,16 @@ jobs:
         yes | android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --licenses
         set -o pipefail
     - name: install Android NDK
-      working-directory: ./AndroidNDK
+      working-directory: ${{ matrix.root-project-path }}
       run: android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
     - name: Insert NDK path
-      working-directory: ./AndroidNDK
+      working-directory: ${{ matrix.root-project-path }}
       run: |
         echo "ndk.dir=$PWD/ndk/${{ matrix.ndk-version }}" >> ./local.properties
     - name: Android Debug Build
-      working-directory: ./AndroidNDK
+      working-directory: ${{ matrix.root-project-path }}
       run: ./gradlew assembleDebug
     - uses: actions/upload-artifact@v3
       with:
         name: outputs
-        path: AndroidNDK/app/build/outputs/
+        path: ${{ matrix.root-project-path }}/app/build/outputs/
