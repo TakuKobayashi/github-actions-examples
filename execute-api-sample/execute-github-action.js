@@ -72,3 +72,49 @@ const downloadArtifactResponse = await octokit.rest.actions.downloadArtifact({
 })
 fs.appendFileSync("output.zip", Buffer.from(downloadArtifactResponse.data))
 */
+
+// Github Actions にて保存されているSecretsの情報のListを取得する
+const secretsListResponse = await octokit.rest.actions.listRepoSecrets({
+  owner,
+  repo,
+});
+// こんな感じのデータが返ってくる
+/*
+{
+  total_count: 24,
+  secrets: [
+    {
+      name: 'ACTIONS_DEPLOY_KEY',
+      created_at: '2019-10-08T20:31:46Z',
+      updated_at: '2019-10-08T20:31:46Z'
+    },
+  ],
+}
+*/
+console.log(secretsListResponse.data);
+
+// Github Actions にて保存されているWorkflowsの情報のListを取得する
+const workflowsListResponse = await octokit.rest.actions.listRepoWorkflows({
+  owner,
+  repo,
+});
+// こんな感じのデータが返ってくる
+/*
+  total_count: 19,
+  workflows: [
+    {
+      id: 265876,
+      node_id: '.....',
+      name: 'Android Release Build',
+      path: '.github/workflows/android-release-build.yml',
+      state: 'active',
+      created_at: '2020-01-12T12:26:10.000+09:00',
+      updated_at: '2021-10-25T04:08:38.000+09:00',
+      url: 'https://api.github.com/repos/TakuKobayashi/github-actions-examples/actions/workflows/265876',
+      html_url: 'https://github.com/TakuKobayashi/github-actions-examples/blob/master/.github/workflows/android-release-build.yml',
+      badge_url: 'https://github.com/TakuKobayashi/github-actions-examples/workflows/Android%20Release%20Build/badge.svg'
+    },
+  ],
+}
+*/
+console.log(workflowsListResponse.data);
