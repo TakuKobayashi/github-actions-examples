@@ -29,14 +29,12 @@ jobs:
     - name: yarn install
       working-directory: ${{ matrix.root-project-path }}
       run: yarn install
-    - name: yarn serverless build package
-      working-directory: ${{ matrix.root-project-path }}
-      run: yarn run serverless package --package ./build
-    - name: serverless deploy
+    - name: serverless package and deploy
       working-directory: ${{ matrix.root-project-path }}
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
+        yarn run serverless package --stage production --package ./build
         yarn run serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
         yarn run serverless deploy --stage production --package ./build
