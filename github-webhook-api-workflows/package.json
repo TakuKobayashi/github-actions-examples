@@ -1,0 +1,37 @@
+{
+  "name": "github-webhook-api-workflows",
+  "version": "1.0.0",
+  "description": "test execute github actions from api",
+  "main": "serverless.ts",
+  "scripts": {
+    "format": "prettier --config .prettierrc --write \"**/*.ts\"",
+    "serverless": "serverless"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "author": "TakuKobayashi",
+  "license": "MIT",
+  "dependencies": {
+    "@vendia/serverless-express": "^4.9.0",
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "octokit": "^2.0.3"
+  },
+  "devDependencies": {
+    "@serverless/typescript": "^3.21.0",
+    "@types/aws-lambda": "^8.10.101",
+    "@types/express": "^4.17.13",
+    "@types/node": "^18.0.5",
+    "dotenv": "^16.0.1",
+    "esbuild": "^0.14.49",
+    "prettier": "^2.7.1",
+    "serverless": "^3.21.0",
+    "serverless-dotenv-plugin": "^4.0.1",
+    "serverless-esbuild": "^1.31.0",
+    "serverless-offline": "^8.8.1",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^4.7.4"
+  }
+}

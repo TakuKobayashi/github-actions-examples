@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+    - master
+
+name: Github webhook api workflows serverless deploy
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+        root-project-path: [./github-webhook-api-workflows]
+    steps:
+    - uses: actions/checkout@v3
+    - name: setup ubuntu
+      run: sudo apt-get --quiet update --yes
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: yarn install
+      working-directory: ${{ matrix.root-project-path }}
+      run: yarn install
+    - name: yarn serverless build package
+      working-directory: ${{ matrix.root-project-path }}
+      run: yarn run serverless package --package ./build
+    - name: serverless deploy
+      working-directory: ${{ matrix.root-project-path }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        yarn run serverless config credentials --provider aws --key ${AWS_ACCESS_KEY_ID} --secret ${AWS_SECRET_ACCESS_KEY}
+        yarn run serverless deploy --stage production --package ./build
