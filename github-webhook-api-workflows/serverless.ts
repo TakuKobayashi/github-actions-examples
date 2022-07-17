@@ -4,7 +4,8 @@ import { config } from 'dotenv';
 const configedEnv = config();
 
 const serverlessConfiguration: AWS = {
-  service: 'github-webhook-api-workflows',
+  // ここの名前が長すぎると胃エラーになる
+  service: 'github-api-workflows',
   frameworkVersion: '3',
   plugins: ['serverless-esbuild', 'serverless-offline', 'serverless-dotenv-plugin'],
   provider: {
