@@ -1,6 +1,6 @@
 import { Octokit } from 'octokit';
 
-const octokit = new Octokit({ auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN });
+const octokit = new Octokit({ auth: process.env.PERSONAL_ACCESS_TOKEN });
 const owner = 'TakuKobayashi';
 const repo = 'github-actions-examples';
 

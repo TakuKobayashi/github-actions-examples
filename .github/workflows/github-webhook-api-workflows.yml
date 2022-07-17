@@ -20,6 +20,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Register .env
+      working-directory: ${{ matrix.project-root-path }}
+      env:
+        PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      run: |
+        echo "PERSONAL_ACCESS_TOKEN=${PERSONAL_ACCESS_TOKEN}" >> ./.env
     - name: yarn install
       working-directory: ${{ matrix.root-project-path }}
       run: yarn install
