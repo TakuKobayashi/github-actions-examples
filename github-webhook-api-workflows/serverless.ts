@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 const configedEnv = config();
 
 const serverlessConfiguration: AWS = {
-  service: 'webhook-recievers',
+  service: 'github-webhook-api-workflows',
   frameworkVersion: '3',
   plugins: ['serverless-esbuild', 'serverless-offline', 'serverless-dotenv-plugin'],
   provider: {
