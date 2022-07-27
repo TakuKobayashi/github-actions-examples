@@ -77,10 +77,12 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Download Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: Unity_v${{ matrix.unity-license-version }}.ulf
-          path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+      - name: Display structure of downloaded files
+        run: ls -a
+        working-directory: ${{ matrix.root-project-path }}/
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
