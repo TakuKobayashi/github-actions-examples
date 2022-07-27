@@ -6,7 +6,6 @@ on:
 jobs:
   license-activate:
     name: license-download
-    runs-on: windows-latest
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
