@@ -1,0 +1,115 @@
+name: execute-unity-builds
+on:
+  push:
+    branches:
+    - feature/research-unity-build
+jobs:
+  license-activate:
+    name: license-download
+    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unity-editor-version: [2020.3.26f1]
+        unity-license-version: [2020.x]
+        node-version: [14.x]
+        root-project-path: [Unity]
+    steps:
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Cache
+      - uses: actions/cache@v3
+        id: cache-unity-license
+        with:
+          key: ${{ runner.os }}-Unity-License-${{ matrix.unity-license-version }}
+          path: |
+            ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+            ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
+
+      # Request Unity Activation File
+      - name: Request manual activation file
+        id: getManualLicenseFile
+        uses: game-ci/unity-request-activation-file@v2
+        with:
+          unityVersion: ${{ matrix.unity-editor-version }}
+
+      # Activate from alf File
+      - name: Install node package, `unity-activate`
+        run: npm install -g unity-activate
+      - name: Activate The License
+        id: activateLicense
+        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ "${{ steps.getManualLicenseFile.outputs.filePath }}"
+      # Upload Build
+      - name: Upload ulfFile
+        uses: actions/upload-artifact@v3
+        with:
+          name: Unity_v${{ matrix.unity-license-version }}.ulf
+          path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+
+  build:
+    name: ${{ matrix.targetPlatform }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unity-license-version: [2020.x]
+        root-project-path: [Unity]
+        targetPlatform:
+          #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          #- StandaloneLinux64 # Build a Linux 64-bit standalone.
+          #- iOS # Build an iOS player.
+          #- Android # Build an Android .apk standalone app.
+          #- WebGL # WebGL.
+          #- Switch
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Unity_v${{ matrix.unity-license-version }}.ulf
+          path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+      - name: Read ulf
+        id: ulfRead
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+
+      # Cache
+      - uses: actions/cache@v3
+        id: cache-unity-library
+        with:
+          key: ${{ runner.os }}-Unity-Library-${{ matrix.targetPlatform }}
+          path: |
+            ${{ matrix.root-project-path }}/Library
+          restore-keys: |
+            ${{ runner.os }}-Unity-Library-
+
+      # Build
+      - name: Build
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ steps.ulfRead.outputs.content }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          projectPath: ${{ matrix.root-project-path }}
+          allowDirtyBuild: true
+
+      # Upload Build
+      - name: Upload Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build-Results
+          path: build/
