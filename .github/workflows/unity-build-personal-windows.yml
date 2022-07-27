@@ -80,6 +80,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Unity_v${{ matrix.unity-license-version }}.ulf
+      - name: run ver
+        run: ver
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
