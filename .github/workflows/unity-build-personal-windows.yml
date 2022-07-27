@@ -58,7 +58,8 @@ jobs:
   build:
     name: ${{ matrix.targetPlatform }}
     needs: license-activate
-    runs-on: windows-latest
+    # https://docs.github.com/ja/actions/using-github-hosted-runners/about-github-hosted-runners
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
@@ -80,8 +81,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Unity_v${{ matrix.unity-license-version }}.ulf
-      - name: run ver
-        run: ver
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
