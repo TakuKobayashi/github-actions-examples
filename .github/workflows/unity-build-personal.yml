@@ -6,8 +6,7 @@ on:
 jobs:
   build:
     name: ${{ matrix.targetPlatform }}
-    runs-on: windows-latest
-    #runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -16,14 +15,13 @@ jobs:
         node-version: [14.x]
         root-project-path: [Unity]
         targetPlatform:
-          #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          #- StandaloneWindows # Build a Windows standalone.
-          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
-          #- StandaloneLinux64 # Build a Linux 64-bit standalone.
-          #- iOS # Build an iOS player.
-          #- Android # Build an Android .apk standalone app.
-          #- WebGL # WebGL.
-          - Switch
+          - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          - iOS # Build an iOS player.
+          - Android # Build an Android .apk standalone app.
+          - WebGL # WebGL.
     steps:
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
