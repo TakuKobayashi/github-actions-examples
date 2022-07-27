@@ -5,7 +5,7 @@ on:
     - feature/research-unity-build
 jobs:
   license-activate:
-    name: license-download
+    name: license-activate
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -57,6 +57,7 @@ jobs:
 
   build:
     name: ${{ matrix.targetPlatform }}
+    needs: license-activate
     runs-on: windows-latest
     strategy:
       fail-fast: false
