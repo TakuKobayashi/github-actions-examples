@@ -82,7 +82,6 @@ jobs:
           name: Unity_v${{ matrix.unity-license-version }}.ulf
       - name: Display structure of downloaded files
         run: dir
-        working-directory: ${{ matrix.root-project-path }}/
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
