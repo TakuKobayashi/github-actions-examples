@@ -80,13 +80,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: Unity_v${{ matrix.unity-license-version }}.ulf
-      - name: Display structure of downloaded files
-        run: dir
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
-          path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
+          path: ./Unity_v${{ matrix.unity-license-version }}.ulf
 
       # Cache
       - uses: actions/cache@v3
