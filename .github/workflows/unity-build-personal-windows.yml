@@ -1,4 +1,4 @@
-name: execute-unity-builds
+name: execute-unity-annothor-os-build
 on:
   push:
     branches:
@@ -67,13 +67,12 @@ jobs:
         root-project-path: [Unity]
         targetPlatform:
           #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          #- StandaloneWindows # Build a Windows standalone.
-          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
           #- StandaloneLinux64 # Build a Linux 64-bit standalone.
           #- iOS # Build an iOS player.
           #- Android # Build an Android .apk standalone app.
           #- WebGL # WebGL.
-          - Switch
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
