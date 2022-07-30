@@ -4,9 +4,9 @@ on:
     branches:
     - feature/research-unity-build
 jobs:
-  license-activate:
-    name: license-activate
-    runs-on: ubuntu-latest
+  build:
+    name: build
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
@@ -14,6 +14,14 @@ jobs:
         unity-license-version: [2021.x]
         node-version: [14.x]
         root-project-path: [Unity]
+        targetPlatform:
+          #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          - StandaloneWindows # Build a Windows standalone.
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          #- StandaloneLinux64 # Build a Linux 64-bit standalone.
+          #- iOS # Build an iOS player.
+          #- Android # Build an Android .apk standalone app.
+          #- WebGL # WebGL.
     steps:
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -25,6 +33,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      # Cache
+      - uses: actions/cache@v3
+        id: cache-unity-library
+        with:
+          key: ${{ runner.os }}-Unity-Library-${{ matrix.targetPlatform }}
+          path: |
+            ${{ matrix.root-project-path }}/Library
+          restore-keys: |
+            ${{ runner.os }}-Unity-Library-
 
       # Cache
       - uses: actions/cache@v3
@@ -54,6 +72,7 @@ jobs:
         with:
           name: ${{ steps.getManualLicenseFile.outputs.filePath }}
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+
       # Upload Build
       - name: Upload ulfFile
         uses: actions/upload-artifact@v3
@@ -61,48 +80,11 @@ jobs:
           name: Unity_v${{ matrix.unity-license-version }}.ulf
           path: ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
 
-  build:
-    name: ${{ matrix.targetPlatform }}
-    needs: license-activate
-    # https://docs.github.com/ja/actions/using-github-hosted-runners/about-github-hosted-runners
-    runs-on: windows-2019
-    strategy:
-      fail-fast: false
-      matrix:
-        unity-editor-version: [2021.3.4f1]
-        unity-license-version: [2021.x]
-        root-project-path: [Unity]
-        targetPlatform:
-          #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          #- StandaloneWindows # Build a Windows standalone.
-          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
-          #- StandaloneLinux64 # Build a Linux 64-bit standalone.
-          #- iOS # Build an iOS player.
-          #- Android # Build an Android .apk standalone app.
-          #- WebGL # WebGL.
-          - Switch
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-      - name: Download Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: Unity_v${{ matrix.unity-license-version }}.ulf
       - name: Read ulf
         id: ulfRead
         uses: juliangruber/read-file-action@v1
         with:
           path: ./Unity_v${{ matrix.unity-license-version }}.ulf
-
-      # Cache
-      - uses: actions/cache@v3
-        id: cache-unity-library
-        with:
-          key: ${{ runner.os }}-Unity-Library-${{ matrix.targetPlatform }}
-          path: |
-            ${{ matrix.root-project-path }}/Library
-          restore-keys: |
-            ${{ runner.os }}-Unity-Library-
 
       # Build
       - name: Build
