@@ -47,7 +47,7 @@ jobs:
         run: npm install -g unity-activate
       - name: Activate The License
         id: activateLicense
-        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ "${{ steps.getManualLicenseFile.outputs.filePath }}"
+        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ -s ${{ secrets.UNITY_SERIAL }} "${{ steps.getManualLicenseFile.outputs.filePath }}"
       # Upload Build
       - name: Upload ulfFile
         uses: actions/upload-artifact@v3
@@ -103,6 +103,7 @@ jobs:
           UNITY_LICENSE: ${{ steps.ulfRead.outputs.content }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           projectPath: ${{ matrix.root-project-path }}
