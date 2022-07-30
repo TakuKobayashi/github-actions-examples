@@ -58,7 +58,7 @@ jobs:
         id: getManualLicenseFile
         uses: game-ci/unity-request-activation-file@v2
         with:
-          unityVersion: ${{ matrix.unity-editor-version }}
+          customImage: unityci/editor:windows-${{ matrix.unity-editor-version }}-windows-il2cpp-1.0.1
 
       # Activate from alf File
       - name: Install node package, `unity-activate`
