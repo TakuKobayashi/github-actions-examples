@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-latest
+    runs-on: windows-2019
     strategy:
       fail-fast: false
       matrix:
@@ -17,7 +17,7 @@ jobs:
         targetPlatform:
           #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows # Build a Windows standalone.
-          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
           #- StandaloneLinux64 # Build a Linux 64-bit standalone.
           #- iOS # Build an iOS player.
           #- Android # Build an Android .apk standalone app.
@@ -56,9 +56,8 @@ jobs:
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
-          unity-modules: windows
       - name: check
-        run: ls
+        run: dir
       # Activate from alf File
       - name: Install node package, `unity-activate`
         run: npm install -g unity-activate
