@@ -7,6 +7,7 @@ jobs:
   build:
     name: build
     runs-on: windows-2019
+    container: unityci/editor:windows-${{ matrix.unity-editor-version }}-windows-il2cpp-1.0.1
     strategy:
       fail-fast: false
       matrix:
@@ -53,12 +54,13 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
-      # Request Unity Activation File
-      - name: Request manual activation file
+      # Activate from alf File
+      - name: generate Request manual activation file
         id: getManualLicenseFile
-        uses: game-ci/unity-request-activation-file@v2
-        with:
-          customImage: unityci/editor:windows-${{ matrix.unity-editor-version }}-windows-il2cpp-1.0.1
+        run: "C:\Program Files\Unity\Hub\Editor\2021.3.4f1\Editor\Unity.exe" -batchmode -createManualActivationFile -logfile
+
+      - name: check
+        run: dir
 
       # Activate from alf File
       - name: Install node package, `unity-activate`
