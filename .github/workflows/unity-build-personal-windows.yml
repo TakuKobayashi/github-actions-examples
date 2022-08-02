@@ -7,7 +7,6 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
-    container: unityci/editor:windows-${{ matrix.unity-editor-version }}-windows-il2cpp-1.0.1
     strategy:
       fail-fast: false
       matrix:
@@ -53,10 +52,12 @@ jobs:
           path: |
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
-
+      - name: Setup Unity
+        uses: kuler90/setup-unity@v1
+        with:
+          unity-modules: android
       - name: check
         run: ls
-
       # Activate from alf File
       - name: Install node package, `unity-activate`
         run: npm install -g unity-activate
