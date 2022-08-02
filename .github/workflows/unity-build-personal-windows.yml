@@ -84,6 +84,8 @@ jobs:
         run: dir
       - name: check
         run: dir C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/
+      - name: check
+        run: dir C:/
       # Activate from alf File
       - name: Install node package, `unity-activate`
         run: npm install -g unity-activate
