@@ -56,8 +56,15 @@ jobs:
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
+          project-path: ${{ matrix.root-project-path }}
       - name: check
+        working-directory: ${{ matrix.root-project-path }}
         run: dir
+
+      - name: check
+        working-directory: ${{ matrix.root-project-path }}
+        run: dir Unity/
+
       # Activate from alf File
       - name: Install node package, `unity-activate`
         run: npm install -g unity-activate
