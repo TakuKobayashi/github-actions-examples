@@ -53,9 +53,10 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
       - name: Setup Unity
-        uses: kuler90/setup-unity@v1
+        uses: kuler90/setup-unity@v1.0.8
         with:
-          unity-modules: android
+          unity-version: ${{ matrix.unity-editor-version }}
+          unity-modules: windows
       - name: check
         run: ls
       # Activate from alf File
