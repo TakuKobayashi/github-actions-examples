@@ -38,6 +38,16 @@ jobs:
       - uses: actions/cache@v3
         id: cache-unity-library
         with:
+          key: ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}
+          path: |
+            C:/Program Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/
+          restore-keys: |
+            ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}-
+
+      # Cache
+      - uses: actions/cache@v3
+        id: cache-unity-library
+        with:
           key: ${{ runner.os }}-Unity-Library-${{ matrix.targetPlatform }}
           path: |
             ${{ matrix.root-project-path }}/Library
@@ -59,7 +69,8 @@ jobs:
           project-path: ${{ matrix.root-project-path }}
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
-        run: C:\Program Files\Unity\Hub\Editor\${{ matrix.unity-editor-version }}\Editor\Unity.exe -batchmode -createManualActivationFile -logfile
+        run: |
+          "C:/Program Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe" -batchmode -createManualActivationFile -logfile
       - name: check
         working-directory: ${{ matrix.root-project-path }}
         run: dir
