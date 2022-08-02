@@ -62,7 +62,14 @@ jobs:
           path: |
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
+
+      - name: Check Unity Editor file existence
+        id: unity_editor_check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe"
       - name: Setup Unity
+        if: steps.unity_editor_check_files.outputs.files_exists == 'false'
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
@@ -73,6 +80,8 @@ jobs:
           C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe -batchmode -createManualActivationFile -logfile
       - name: check
         working-directory: ${{ matrix.root-project-path }}
+        run: dir
+      - name: check
         run: dir
       # Activate from alf File
       - name: Install node package, `unity-activate`
