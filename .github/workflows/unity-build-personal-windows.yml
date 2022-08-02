@@ -36,7 +36,7 @@ jobs:
 
       # Cache
       - uses: actions/cache@v3
-        id: cache-unity-library
+        id: cache-unity-editor
         with:
           key: ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}
           path: |
