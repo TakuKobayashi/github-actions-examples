@@ -40,7 +40,7 @@ jobs:
         with:
           key: ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}
           path: |
-            C:/Program Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/
+            C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/
           restore-keys: |
             ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}-
 
@@ -70,7 +70,7 @@ jobs:
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
         run: |
-          "C:/Program Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe" -batchmode -createManualActivationFile -logfile
+          C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe -batchmode -createManualActivationFile -logfile
       - name: check
         working-directory: ${{ matrix.root-project-path }}
         run: dir
