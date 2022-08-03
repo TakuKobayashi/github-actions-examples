@@ -76,7 +76,7 @@ jobs:
           project-path: ${{ matrix.root-project-path }}
       - name: generate alf file
         run: |
-          C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe -batchmode -createManualActivationFile -logfile
+          C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe -batchmode -projectPath ${{ matrix.root-project-path }} -createManualActivationFile -logfile
       - name: check
         working-directory: ${{ matrix.root-project-path }}
         run: dir
