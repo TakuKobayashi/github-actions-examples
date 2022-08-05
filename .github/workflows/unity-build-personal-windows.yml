@@ -14,6 +14,10 @@ jobs:
         unity-license-version: [2021.x]
         node-version: [14.x]
         root-project-path: [Unity]
+        unity-module:
+          - android
+          - webgl
+          - windows-il2cpp
         targetPlatform:
           #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows # Build a Windows standalone.
@@ -68,7 +72,7 @@ jobs:
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
-          unity-modules: windows, android, webgl
+          unity-modules: ${{ matrix.unity-module }}
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
