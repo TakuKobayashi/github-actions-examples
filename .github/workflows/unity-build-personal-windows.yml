@@ -17,7 +17,7 @@ jobs:
         unity-module:
           #- android
           #- webgl
-          - windows-il2cpp
+          - switch
         targetPlatform:
           #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows # Build a Windows standalone.
