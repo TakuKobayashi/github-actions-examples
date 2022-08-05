@@ -40,7 +40,7 @@ jobs:
         with:
           key: ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}
           path: |
-            C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/
+            C:/Program Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/
           restore-keys: |
             ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}-
 
@@ -68,7 +68,7 @@ jobs:
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
-          unity-modules: windows-il2cpp, android, webgl
+          unity-modules: windows, android, webgl
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
