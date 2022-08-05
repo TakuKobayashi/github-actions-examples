@@ -63,17 +63,17 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
-      - name: Check Unity Editor file existence
-        id: unity_editor_check_files
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe"
       - name: Setup Unity
-        if: steps.unity_editor_check_files.outputs.files_exists == 'false'
+        id: setup-unity
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
-          project-path: ${{ matrix.root-project-path }}
+          unity-modules: windows-il2cpp, android, webgl
+      - name: Print output
+        run: |
+          echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
+          echo unity-path: ${{ steps.setup-unity.outputs.unity-path }}
+          echo env UNITY_PATH: ${{ env.UNITY_PATH }}
       - name: generate alf file
         run: |
           C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe -batchmode -nographic -quit -projectPath ${{ matrix.root-project-path }}/ -createManualActivationFile -logfile ./
