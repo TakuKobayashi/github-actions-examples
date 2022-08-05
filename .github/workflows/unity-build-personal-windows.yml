@@ -17,7 +17,7 @@ jobs:
         unity-module:
           #- android
           #- webgl
-          - switch
+          - windows-il2cpp
         targetPlatform:
           #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
           - StandaloneWindows # Build a Windows standalone.
@@ -93,7 +93,7 @@ jobs:
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
-          unity-username: ${{ secrets.UNITY_USERNAME }}
+          unity-username: ${{ secrets.UNITY_EMAIL }}
           unity-password: ${{ secrets.UNITY_PASSWORD }}
           unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
           unity-serial: ${{ secrets.UNITY_SERIAL }}
