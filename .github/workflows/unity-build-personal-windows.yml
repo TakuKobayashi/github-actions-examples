@@ -15,8 +15,8 @@ jobs:
         node-version: [14.x]
         root-project-path: [Unity]
         unity-module:
-          - android
-          - webgl
+          #- android
+          #- webgl
           - windows-il2cpp
         targetPlatform:
           #- StandaloneOSX # Build a macOS standalone (Intel 64-bit).
@@ -90,12 +90,19 @@ jobs:
         run: dir C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/
       - name: check
         run: dir C:/
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-username: ${{ secrets.UNITY_USERNAME }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+          unity-serial: ${{ secrets.UNITY_SERIAL }}
       # Activate from alf File
-      - name: Install node package, `unity-activate`
-        run: npm install -g unity-activate
-      - name: Activate The License
-        id: activateLicense
-        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ -s ${{ secrets.UNITY_SERIAL }} "${{ steps.getManualLicenseFile.outputs.filePath }}"
+#      - name: Install node package, `unity-activate`
+#        run: npm install -g unity-activate
+#      - name: Activate The License
+#        id: activateLicense
+#        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ -s ${{ secrets.UNITY_SERIAL }} "${{ steps.getManualLicenseFile.outputs.filePath }}"
       # Upload Build
       - name: Upload alfFile
         uses: actions/upload-artifact@v3
