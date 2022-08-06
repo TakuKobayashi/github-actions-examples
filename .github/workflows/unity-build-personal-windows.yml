@@ -67,18 +67,23 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
+
       - name: Setup Unity
         id: setup-unity
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
           unity-modules: ${{ matrix.unity-module }}
-          install-path: ./
+          install-path: ${{ github.workspace }}
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
           echo unity-path: ${{ steps.setup-unity.outputs.unity-path }}
           echo env UNITY_PATH: ${{ env.UNITY_PATH }}
+      - name: generate alf file
+        working-directory: ${{ matrix.root-project-path }}
+        run: |
+          "${{ steps.setup-unity.outputs.unity-path }}" -batchmode -nographic -quit -createManualActivationFile -logfile ./
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
@@ -103,6 +108,11 @@ jobs:
 #        id: activateLicense
 #        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ -s ${{ secrets.UNITY_SERIAL }} "${{ steps.getManualLicenseFile.outputs.filePath }}"
       # Upload Build
+      - name: Upload alfFile
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
       # Upload Build
       - name: Upload ulfFile
