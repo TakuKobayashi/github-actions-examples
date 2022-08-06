@@ -84,7 +84,7 @@ jobs:
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
         run: |
-          "${{ steps.setup-unity.outputs.unity-path }}" -batchmode -nographic -quit -createManualActivationFile -logfile ./
+          ${{ steps.setup-unity.outputs.unity-path }} -batchmode -nographic -quit -createManualActivationFile -logfile ./
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
@@ -98,10 +98,6 @@ jobs:
         run: dir
       - name: check
         run: dir
-      - name: check
-        run: dir C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/
-      - name: check
-        run: dir C:/
       # Activate from alf File
 #      - name: Install node package, `unity-activate`
 #        run: npm install -g unity-activate
