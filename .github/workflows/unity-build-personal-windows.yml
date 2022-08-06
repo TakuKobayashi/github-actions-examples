@@ -14,6 +14,7 @@ jobs:
         unity-license-version: [2021.x]
         node-version: [14.x]
         root-project-path: [Unity]
+        unity-editor-install-path: [UnityEditor]
         unity-module:
           #- android
           #- webgl
@@ -44,7 +45,7 @@ jobs:
         with:
           key: ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}
           path: |
-            C:/Program Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/
+            ${{ github.workspace }}/${{ matrix.unity-editor-install-path }}/${{ matrix.unity-editor-version }}/
           restore-keys: |
             ${{ runner.os }}-Unity-Editor-${{ matrix.unity-editor-version }}-
 
@@ -67,14 +68,13 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
-
       - name: Setup Unity
         id: setup-unity
         uses: kuler90/setup-unity@v1.0.8
         with:
           unity-version: ${{ matrix.unity-editor-version }}
           unity-modules: ${{ matrix.unity-module }}
-          install-path: ${{ github.workspace }}
+          install-path: ${{ github.workspace }}/${{ matrix.unity-editor-install-path }}
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
@@ -84,7 +84,7 @@ jobs:
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
         run: |
-          ${{ steps.setup-unity.outputs.unity-path }} -batchmode -nographic -quit -createManualActivationFile -logfile ./
+          "${{ steps.setup-unity.outputs.unity-path }}" -batchmode -nographic -quit -createManualActivationFile -logfile ./
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:

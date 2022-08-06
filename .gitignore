@@ -354,3 +354,6 @@ google-services.json
 
 *.alf
 *.ulf
+
+UnityEditor/
+!UnityEditor/.keep
