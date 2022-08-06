@@ -67,6 +67,10 @@ jobs:
       - name: check
         working-directory: ${{ matrix.unity-editor-install-path }}
         run: dir
+      - name: Print output
+        run: |
+          echo env UNITY_PATH: ${{ env.UNITY_PATH }}
+          echo workspace path: ${{ github.workspace }}
 
       #- if: ${{ steps.cache-unity-editor.outputs.cache-hit == 'false' }}
       - name: Setup Unity
@@ -81,12 +85,11 @@ jobs:
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
           echo unity-path: ${{ steps.setup-unity.outputs.unity-path }}
           echo env UNITY_PATH: ${{ env.UNITY_PATH }}
-          echo workspace path: ${{ github.workspace }}
       # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
       - name: generate alf file
         shell: cmd
         run: |
-          ${{ matrix.unity-editor-install-path }}\${{ matrix.unity-editor-version }}\Editor\Unity.exe -batchmode -nographic -quit -createManualActivationFile -logfile
+          ${{ env.UNITY_PATH }} -batchmode -nographic -quit -createManualActivationFile -logfile
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
