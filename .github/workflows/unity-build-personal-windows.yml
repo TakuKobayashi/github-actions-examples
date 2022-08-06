@@ -89,7 +89,7 @@ jobs:
       - name: generate alf file
         shell: cmd
         run: |
-          ${{ env.UNITY_PATH }} -batchmode -nographic -quit -createManualActivationFile -logfile
+          "${{ env.UNITY_PATH }}" -batchmode -nographic -quit -createManualActivationFile -logfile
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
