@@ -73,14 +73,20 @@ jobs:
         with:
           unity-version: ${{ matrix.unity-editor-version }}
           unity-modules: ${{ matrix.unity-module }}
+          install-pat: ${{ matrix.root-project-path }}/
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
           echo unity-path: ${{ steps.setup-unity.outputs.unity-path }}
           echo env UNITY_PATH: ${{ env.UNITY_PATH }}
-      - name: generate alf file
-        run: |
-          C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/Unity.exe -batchmode -nographic -quit -projectPath ${{ matrix.root-project-path }}/ -createManualActivationFile -logfile ./
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-path: ${{ steps.setup-unity.outputs.unity-path }}
+          unity-username: ${{ secrets.UNITY_EMAIL }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
+          unity-serial: ${{ secrets.UNITY_SERIAL }}
       - name: check
         working-directory: ${{ matrix.root-project-path }}
         run: dir
@@ -90,13 +96,6 @@ jobs:
         run: dir C:/Program` Files/Unity/Hub/Editor/${{ matrix.unity-editor-version }}/Editor/
       - name: check
         run: dir C:/
-      - name: Activate Unity
-        uses: kuler90/activate-unity@v1
-        with:
-          unity-username: ${{ secrets.UNITY_EMAIL }}
-          unity-password: ${{ secrets.UNITY_PASSWORD }}
-          unity-authenticator-key: ${{ secrets.UNITY_AUTHENTICATOR_KEY }}
-          unity-serial: ${{ secrets.UNITY_SERIAL }}
       # Activate from alf File
 #      - name: Install node package, `unity-activate`
 #        run: npm install -g unity-activate
