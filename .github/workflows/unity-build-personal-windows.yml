@@ -79,7 +79,6 @@ jobs:
           echo env UNITY_PATH: ${{ env.UNITY_PATH }}
           echo workspace path: ${{ github.workspace }}
       - name: generate alf file
-        working-directory: ${{ matrix.root-project-path }}
         run: |
           ${{ matrix.unity-editor-install-path }}\${{ matrix.unity-editor-version }}\Editor\Unity.exe -batchmode -nographic -quit -createManualActivationFile -logfile
       - name: Activate Unity
