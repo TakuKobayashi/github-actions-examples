@@ -73,7 +73,7 @@ jobs:
         with:
           unity-version: ${{ matrix.unity-editor-version }}
           unity-modules: ${{ matrix.unity-module }}
-          install-path: ${{ matrix.root-project-path }}/
+          install-path: ./
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
