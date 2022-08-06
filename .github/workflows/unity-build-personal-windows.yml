@@ -73,7 +73,7 @@ jobs:
         with:
           unity-version: ${{ matrix.unity-editor-version }}
           unity-modules: ${{ matrix.unity-module }}
-          install-pat: ${{ matrix.root-project-path }}/
+          install-path: ${{ matrix.root-project-path }}/
       - name: Print output
         run: |
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
@@ -103,11 +103,6 @@ jobs:
 #        id: activateLicense
 #        run: unity-activate -u "${{ secrets.UNITY_EMAIL }}" -p "${{ secrets.UNITY_PASSWORD }}" -k "${{ secrets.UNITY_AUTHENTICATOR_KEY }}" -o ${{ matrix.root-project-path }}/ -s ${{ secrets.UNITY_SERIAL }} "${{ steps.getManualLicenseFile.outputs.filePath }}"
       # Upload Build
-      - name: Upload alfFile
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ steps.getManualLicenseFile.outputs.filePath }}
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
 
       # Upload Build
       - name: Upload ulfFile
