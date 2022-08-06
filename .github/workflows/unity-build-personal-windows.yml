@@ -80,6 +80,7 @@ jobs:
           echo unity-version: ${{ steps.setup-unity.outputs.unity-version }}
           echo unity-path: ${{ steps.setup-unity.outputs.unity-path }}
           echo env UNITY_PATH: ${{ env.UNITY_PATH }}
+          echo workspace path: ${{ github.workspace }}
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
         run: |
