@@ -64,8 +64,8 @@ jobs:
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-license-version }}.ulf
             ${{ matrix.root-project-path }}/Unity_v${{ matrix.unity-editor-version }}.alf
 
-      - if: ${{ steps.cache-unity-editor.outputs.cache-hit == 'false' }}
-        name: Setup Unity
+      #- if: ${{ steps.cache-unity-editor.outputs.cache-hit == 'false' }}
+      - name: Setup Unity
         id: setup-unity
         uses: kuler90/setup-unity@v1.0.8
         with:
@@ -81,7 +81,7 @@ jobs:
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
         run: |
-          ${{ github.workspace }}\${{ matrix.unity-editor-install-path }}\${{ matrix.unity-editor-version }}\Editor\Unity.exe -batchmode -nographic -quit -createManualActivationFile -logfile
+          ${{ matrix.unity-editor-install-path }}\${{ matrix.unity-editor-version }}\Editor\Unity.exe -batchmode -nographic -quit -createManualActivationFile -logfile
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
