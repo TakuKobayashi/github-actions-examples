@@ -84,7 +84,7 @@ jobs:
       - name: generate alf file
         working-directory: ${{ matrix.root-project-path }}
         run: |
-          "${{ steps.setup-unity.outputs.unity-path }}" -batchmode -nographic -quit -createManualActivationFile -logfile ./
+          ${{ steps.setup-unity.outputs.unity-path }} -batchmode -nographic -quit -createManualActivationFile -logfile ${{ github.workspace }}
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
         with:
