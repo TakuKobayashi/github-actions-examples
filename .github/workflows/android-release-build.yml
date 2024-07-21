@@ -12,25 +12,26 @@ jobs:
 
     strategy:
       matrix:
-        compile-sdk: [31]
-        build-tools: [30.0.3]
+        compile-sdk: [34]
+        build-tools: [34.0.0]
+        commandlinetools-download-url: ['https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip']
         root-project-path: [./Android]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: setup ubuntu
       run: |
         sudo apt-get --quiet update --yes
         sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
-    - name: setup JDK 1.8
-      uses: actions/setup-java@v2
+    - name: setup JDK
+      uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'
-        java-version: '11'
+        distribution: 'microsoft'
+        java-version: '17'
     - name: download Android SDK
       working-directory: ${{ matrix.root-project-path }}
       run: |
-        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-8092744_latest.zip
+        wget --quiet --output-document=android-sdk.zip ${{ matrix.commandlinetools-download-url }}
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
@@ -66,7 +67,7 @@ jobs:
     - name: Android Release aab Build
       working-directory: ${{ matrix.root-project-path }}
       run: ./gradlew bundleRelease
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: outputs
         path: ${{ matrix.root-project-path }}/app/build/outputs/
@@ -76,13 +77,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [18.x]
         root-project-path: [./Android]
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Download Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: outputs
           path: ${{ matrix.root-project-path }}/outputs
@@ -93,7 +94,7 @@ jobs:
           token: ${{secrets.FIREBASE_TOKEN}}
           file: ${{ matrix.root-project-path }}/outputs/apk/release/app-release.apk
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: install firebase-tools
