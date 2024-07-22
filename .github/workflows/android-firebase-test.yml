@@ -16,7 +16,7 @@ jobs:
         build-tools: [35.0.0]
         commandlinetools-download-url: ['https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip']
         root-project-path: [./Android]
-        test-device-model-name: ["Pixel8"]
+        test-device-model-name: ["akita"]
         test-device-version: [34]
         test-locale: ["ja_JP"]
 
