@@ -5,10 +5,11 @@ apply plugin: 'com.google.gms.google-services'
 def properties = loadLocalProperties();
 
 android {
+    namespace 'net.taptappun.taku.kobayashi.githubactionsexamples'
     compileSdk 35
     defaultConfig {
         applicationId "net.taptappun.taku.kobayashi.githubactionsexamples"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 35
         versionCode 1
         versionName "1.0"
@@ -36,7 +37,13 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    namespace 'net.taptappun.taku.kobayashi.githubactionsexamples'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 private def loadLocalProperties() {
