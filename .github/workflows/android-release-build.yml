@@ -12,8 +12,8 @@ jobs:
 
     strategy:
       matrix:
-        compile-sdk: [34]
-        build-tools: [34.0.0]
+        compile-sdk: [35]
+        build-tools: [35.0.0]
         commandlinetools-download-url: ['https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip']
         root-project-path: [./Android]
 

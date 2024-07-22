@@ -12,10 +12,11 @@ jobs:
 
     strategy:
       matrix:
-        compile-sdk: [31]
-        build-tools: [30.0.3]
-        ndk-version: [21.0.6113669]
-        cmake-version: [3.10.2.4988404]
+        compile-sdk: [35]
+        build-tools: [35.0.0]
+        commandlinetools-download-url: ['https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip']
+        ndk-version: [27.0.12077973]
+        cmake-version: [3.22.1]
         root-project-path: [./AndroidNDK]
 
     steps:
@@ -24,15 +25,15 @@ jobs:
       run: |
         sudo apt-get --quiet update --yes
         sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
-    - name: setup JDK 1.8
-      uses: actions/setup-java@v2
+    - name: setup JDK
+      uses: actions/setup-java@v4
       with:
-        distribution: 'zulu'
-        java-version: '11'
+        distribution: 'microsoft'
+        java-version: '17'
     - name: download Android SDK
       working-directory: ${{ matrix.root-project-path }}
       run: |
-        wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-8092744_latest.zip
+        wget --quiet --output-document=android-sdk.zip ${{ matrix.commandlinetools-download-url }}
         unzip -d android-sdk-linux android-sdk.zip
         sudo mkdir -p /root/.android
         sudo touch /root/.android/repositories.cfg
@@ -69,7 +70,7 @@ jobs:
     - name: Android Release aab Build
       working-directory: ${{ matrix.root-project-path }}
       run: ./gradlew bundleRelease
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: outputs
         path: ${{ matrix.root-project-path }}/app/build/outputs/
