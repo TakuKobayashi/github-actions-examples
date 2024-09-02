@@ -92,18 +92,3 @@ jobs:
         with:
           serviceCredentialsFileContent: ${{ secrets.GOOGLE_SERVICES_JSON }}
           file: ${{ matrix.root-project-path }}/outputs/apk/release/app-release.apk
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: install firebase-tools
-        working-directory: ${{ matrix.root-project-path }}
-        run: npm install -g firebase-tools
-      - name: upload artifact to Firebase App Distribution
-        working-directory: ${{ matrix.root-project-path }}
-        run: echo ${{ secrets.GOOGLE_SERVICES_JSON }} > credentials.json
-      - name: Save credentials into environment variables
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=./credentials.json" >> $GITHUB_ENV
-      - name: upload artifact to Firebase App Distribution manual
-        working-directory: ${{ matrix.root-project-path }}
-        run: firebase appdistribution:distribute outputs/apk/release/app-release.apk --app ${{secrets.FIREBASE_APP_ID}}

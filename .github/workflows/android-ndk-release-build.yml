@@ -49,10 +49,6 @@ jobs:
     - name: install Android NDK
       working-directory: ${{ matrix.root-project-path }}
       run: android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
-    - name: Insert NDK path
-      working-directory: ${{ matrix.root-project-path }}
-      run: |
-        echo "ndk.dir=$PWD/ndk/${{ matrix.ndk-version }}" >> ./local.properties
     - name: Setup Build Configs
       working-directory: ${{ matrix.root-project-path }}
       env:
@@ -74,3 +70,35 @@ jobs:
       with:
         name: outputs
         path: ${{ matrix.root-project-path }}/app/build/outputs/
+
+  distribution:
+    name: AppDistribution
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+        root-project-path: [./Android]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: outputs
+          path: ${{ matrix.root-project-path }}/outputs
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}\
+      - name: install firebase-tools
+        working-directory: ${{ matrix.root-project-path }}
+        run: npm install -g firebase-tools
+      - name: upload artifact to Firebase App Distribution
+        working-directory: ${{ matrix.root-project-path }}
+        run: echo ${{ secrets.GOOGLE_SERVICES_JSON }} > credentials.json
+      - name: Save credentials into environment variables
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=./credentials.json" >> $GITHUB_ENV
+      - name: upload artifact to Firebase App Distribution manual
+        working-directory: ${{ matrix.root-project-path }}
+        run: firebase appdistribution:distribute outputs/apk/release/app-release.apk --app ${{secrets.FIREBASE_ANDROID_NDK_APP_ID}}
