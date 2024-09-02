@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-    - master
+    - github-webhook
 
 name: Github webhook api workflows serverless deploy
 jobs:
