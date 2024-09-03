@@ -49,10 +49,12 @@ jobs:
     - name: install Android NDK
       working-directory: ${{ matrix.root-project-path }}
       run: android-sdk-linux/cmdline-tools/bin/sdkmanager --sdk_root=. --install "ndk;${{ matrix.ndk-version }}" "cmake;${{ matrix.cmake-version }}"
-    - name: Insert NDK path
+    - name: setup google-services.json
       working-directory: ${{ matrix.root-project-path }}
+      env:
+        ANDROID_NDK_GOOGLE_SERVICES_JSON: ${{ secrets.ANDROID_NDK_GOOGLE_SERVICES_JSON }}
       run: |
-        echo "ndk.dir=$PWD/ndk/${{ matrix.ndk-version }}" >> ./local.properties
+        echo "${ANDROID_NDK_GOOGLE_SERVICES_JSON}" >> ./app/google-services.json
     - name: Android Debug Build
       working-directory: ${{ matrix.root-project-path }}
       run: ./gradlew assembleDebug
