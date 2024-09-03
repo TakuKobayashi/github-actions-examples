@@ -90,5 +90,6 @@ jobs:
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          serviceCredentialsFileContent: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
           file: ${{ matrix.root-project-path }}/outputs/apk/release/app-release.apk
