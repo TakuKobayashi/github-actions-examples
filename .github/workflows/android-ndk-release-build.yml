@@ -96,7 +96,7 @@ jobs:
         run: npm install -g firebase-tools
       - name: upload artifact to Firebase App Distribution
         working-directory: ${{ matrix.root-project-path }}
-        run: echo ${{ secrets.FIREBASE_CREDENTIALS_JSON }} > credentials.json
+        run: echo "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > credentials.json
       - name: Save credentials into environment variables
         run: echo "GOOGLE_APPLICATION_CREDENTIALS=./credentials.json" >> $GITHUB_ENV
       - name: upload artifact to Firebase App Distribution manual
