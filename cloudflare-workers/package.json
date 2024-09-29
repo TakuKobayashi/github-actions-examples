@@ -2,6 +2,8 @@
   "name": "github-actions-examples",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
+    "wrangler": "wrangler",
+    "put-secrets": "node scripts/convert-dotenv-to-json.js | wrangler secret bulk .env.json",
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
@@ -9,6 +11,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
+    "dotenv": "^16.4.5",
     "wrangler": "^3.57.2"
   }
 }

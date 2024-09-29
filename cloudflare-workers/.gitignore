@@ -19,6 +19,7 @@ node_modules/
 .env
 .env.production
 .dev.vars
+wrangler.toml.production
 
 # logs
 logs/
