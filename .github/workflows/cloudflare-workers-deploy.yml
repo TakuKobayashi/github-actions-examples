@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - cloudflare-workers-deploy
+
+name: Deploy Cloudflare Workers
+jobs:
+  builddeploy:
+    name: Deploy Cloudflare Workers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+        root-project-path: [./cloudflare-workers]
+    steps:
+    - uses: actions/checkout@v4
+    - name: setup ubuntu
+      run: |
+        sudo apt-get --quiet update --yes
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: yarn install
+      working-directory: ${{ matrix.root-project-path }}
+      run: yarn install
+    - name: deploy to cloudflare workers
+      uses: cloudflare/wrangler-action@v3
+      with:
+        workingDirectory: ${{ matrix.root-project-path }}
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        secrets: |
+          SAMPLE_SECRET_API_KEY
+      env:
+        SAMPLE_SECRET_API_KEY: 'SAMPLE'
