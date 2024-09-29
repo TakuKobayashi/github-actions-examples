@@ -24,6 +24,12 @@ jobs:
     - name: yarn install
       working-directory: ${{ matrix.root-project-path }}
       run: yarn install
+    - name: update wrangler.toml
+      working-directory: ${{ matrix.root-project-path }}
+      env:
+        CLOUDFLARE_WRANGLER_TOML: ${{ secrets.CLOUDFLARE_WRANGLER_TOML }}
+      run: |
+        echo "${CLOUDFLARE_WRANGLER_TOML}" > ./wrangler.toml
     - name: deploy to cloudflare workers
       uses: cloudflare/wrangler-action@v3
       with:
