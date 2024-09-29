@@ -1,5 +1,6 @@
 import { KVNamespace, D1Database } from '@cloudflare/workers-types';
 import { Context, Hono } from 'hono';
+import { env } from 'hono/adapter';
 
 type Bindings = {
   DB: D1Database;
@@ -14,6 +15,11 @@ app.get('/', (c: Context) => {
 
 app.get('/json', (c) => {
   return c.json({ hello: 'Hono JSON' });
+});
+
+app.get('/env/json', (c: Context) => {
+  const dotenvObj = env(c);
+  return c.json(dotenvObj);
 });
 
 app.get('/kv/getsample', async (c: Context) => {
