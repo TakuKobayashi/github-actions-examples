@@ -16,8 +16,159 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    # add actions here: https://docs.fastlane.tools/actions
+  desc "Distribution of AdHoc build"
+  lane :adhoc_build do |options|
+    configuration = options[:configuration] || 'Debug'
+    keychain_name = 'ios-build.keychain'
+    keychain_password = 'ioscibuildpassword'
+    certificate_pathes = Dir.glob("../certificates/*.p12")
+    certificate_path = File.absolute_path(certificate_pathes.first)
+    provisioning_profile_pathes = Dir.glob("../certificates/*.mobileprovision")
+    xcodeproject_pathes = Dir.glob("../*.xcodeproj")
+    xcodeproject_path = File.absolute_path(xcodeproject_pathes.first)
+    scheme_name = File.basename(xcodeproject_path, ".*")
+    # ここから先は途中で失敗したとしても作ったkeychainは消してのでbeginで囲っている
+    begin
+      import_certificate_routine(
+        keychain_name: keychain_name,
+        keychain_password: keychain_password,
+        certificate_path: certificate_path,
+        certificate_password: ENV["IOS_CERTIFICATE_PASSWORD"],
+      )
+      parsed_profiles = import_and_load_provisioning_profiles(
+        provisioning_profile_pathes: provisioning_profile_pathes
+      )
+      update_buildable_xcode_project(
+        parsed_profiles: parsed_profiles,
+        xcodeproject_path: xcodeproject_path,
+        configuration: configuration
+      )
+      build_app(
+        configuration: configuration,
+        scheme: scheme_name,
+        export_method: 'ad-hoc',
+        output_name: "adhoc-#{configuration.downcase}.ipa",
+        clean: true,
+      )
+    ensure
+      delete_keychain(
+        name: keychain_name,
+      )
+    end
+  end
+
+  desc "Distribution of AppStore build"
+  lane :store_build  do |options|
+    configuration = 'Release'
+    keychain_name = 'ios-build.keychain'
+    keychain_password = 'ioscibuildpassword'
+    certificate_pathes = Dir.glob("../certificates/*.p12")
+    certificate_path = File.absolute_path(certificate_pathes.first)
+    provisioning_profile_pathes = Dir.glob("../certificates/*.mobileprovision")
+    xcodeproject_path = File.absolute_path(provisioning_profile_pathes.first)
+    scheme_name = File.basename(xcodeproject_path, ".*")
+    # ここから先は途中で失敗したとしても作ったkeychainは消してのでbeginで囲っている
+    begin
+      import_certificate_routine(
+        keychain_name: keychain_name,
+        keychain_password: keychain_password,
+        certificate_path: certificate_path,
+        certificate_password: ENV["IOS_CERTIFICATE_PASSWORD"],
+      )
+  
+      parsed_profiles = import_and_load_provisioning_profiles(
+        provisioning_profile_pathes: provisioning_profile_pathes
+      )
+      update_buildable_xcode_project(
+        parsed_profiles: parsed_profiles,
+        xcodeproject_path: xcodeproject_path,
+        configuration: configuration
+      )
+      build_app(
+        configuration: configuration,
+        scheme: scheme_name,
+        export_method: 'app-store',
+        output_name: "store-#{configuration.downcase}.ipa",
+        clean: true,
+      )
+    ensure
+      delete_keychain(
+        name: keychain_name,
+      )
+    end
+  end
+
+  private_lane :import_certificate_routine do |params|
+    # https://docs.fastlane.tools/actions/create_keychain/
+    create_keychain(
+      name: params[:keychain_name],
+      password: params[:keychain_password],
+      unlock: true,
+      default_keychain: true,
+      timeout: 3600
+    )
+    # https://docs.fastlane.tools/actions/import_certificate/
+    import_certificate(
+      keychain_name: params[:keychain_name],
+      keychain_password: params[:keychain_password],
+      certificate_path: params[:certificate_path],
+      certificate_password: params[:certificate_password],
+      log_output: true
+    )
+  end
+
+  private_lane :import_and_load_provisioning_profiles do |params|
+    provisioning_profile_pathes = params[:provisioning_profile_pathes] || []
+    parsed_profiles = []
+    provisioning_profile_pathes.each do |provisioning_profile_path|
+      provisioning_profile_absolute_path = File.absolute_path(provisioning_profile_path)
+      profile = FastlaneCore::ProvisioningProfile.parse(provisioning_profile_absolute_path)
+      parsed_profiles << profile
+      install_provisioning_profile(path: provisioning_profile_absolute_path)
+    end
+    parsed_profiles
+  end
+
+  private_lane :update_buildable_xcode_project do |params|
+    parsed_profiles = params[:parsed_profiles] || []
+    xcodeproject_path = params[:xcodeproject_path]
+    configuration = params[:configuration]
+    team_identifiers_set = Set.new
+    project = Xcodeproj::Project.open(xcodeproject_path)
+    project.targets.each do |target|
+      # name=`Debug` name=`Staging` name=`Release`
+      target_build_configuration = target.build_configurations.find { |bc| bc.name == configuration }
+      target_resolution = target_build_configuration.resolve_build_setting('PRODUCT_BUNDLE_IDENTIFIER')
+      if !target_resolution.nil?
+        # Test他も取得できてしまうのでmobileprovisionファイルが存在するもののみHashとして指定する
+        target_parsed_profile = parsed_profiles.find do |parsed_profile|
+          team_identifier = parsed_profile["Entitlements"]["com.apple.developer.team-identifier"]
+          application_identifier = parsed_profile["Entitlements"]["application-identifier"]
+          build_application_identifier = [team_identifier, target_resolution].join('.')
+          application_identifier == build_application_identifier
+        end
+        if !target_parsed_profile.nil?
+          # update_code_signing_settings ではXcodeのプロジェクト設定を更新する処理
+          # https://docs.fastlane.tools/actions/update_code_signing_settings/ を参照
+          # ipaファイルとして抽出したい場合は code_sign_identity: "iPhone Distribution" に強制的に上書きして指定する必要がある
+          # profile_uuidにプロビジョニングプロファイルのUUIDを紐づけてあげないとinstallしたプロビジョニングプロファイルが参照されない
+          update_code_signing_settings(
+            use_automatic_signing: false,
+            team_id: target_parsed_profile["Entitlements"]["com.apple.developer.team-identifier"],
+            targets: target.name,
+            build_configurations: configuration,
+            code_sign_identity: "iPhone Distribution",
+            profile_uuid: target_parsed_profile["UUID"],
+            path: xcodeproject_path
+          )
+          team_identifiers_set.add(target_parsed_profile["Entitlements"]["com.apple.developer.team-identifier"])
+        end
+      end
+    end
+
+    update_project_team(
+      path: xcodeproject_path,
+      teamid: team_identifiers_set.first
+    )
   end
 end
